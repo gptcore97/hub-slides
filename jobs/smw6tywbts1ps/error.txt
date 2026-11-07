@@ -1,0 +1,19 @@
+YAMLParseError: Nested mappings are not allowed in compact mappings at line 2, column 8:
+
+title: Gli Ebrei: Storia e Cultura
+       ^
+
+    at Composer.onError (/home/runner/work/hub-slides/hub-slides/node_modules/yaml/dist/compose/composer.js:70:34)
+    at Object.resolveBlockMap (/home/runner/work/hub-slides/hub-slides/node_modules/yaml/dist/compose/resolve-block-map.js:78:21)
+    at resolveCollection (/home/runner/work/hub-slides/hub-slides/node_modules/yaml/dist/compose/compose-collection.js:13:27)
+    at Object.composeCollection (/home/runner/work/hub-slides/hub-slides/node_modules/yaml/dist/compose/compose-collection.js:59:16)
+    at Object.composeNode (/home/runner/work/hub-slides/hub-slides/node_modules/yaml/dist/compose/compose-node.js:34:42)
+    at Object.composeDoc (/home/runner/work/hub-slides/hub-slides/node_modules/yaml/dist/compose/compose-doc.js:35:23)
+    at Composer.next (/home/runner/work/hub-slides/hub-slides/node_modules/yaml/dist/compose/composer.js:152:40)
+    at next (<anonymous>)
+    at Composer.compose (/home/runner/work/hub-slides/hub-slides/node_modules/yaml/dist/compose/composer.js:134:25)
+    at compose.next (<anonymous>) {
+  code: 'BLOCK_AS_IMPLICIT_KEY',
+  pos: [ 21, 22 ],
+  linePos: [ { line: 2, col: 8 }, { line: 2, col: 9 } ]
+}
