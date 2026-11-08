@@ -1,0 +1,84 @@
+# Parte quando Apps Script salva un nuovo jobs/ID/slides.md nel repository.
+# Prepara tema e foto (theme/prepare.mjs), esporta PDF e PNG con Slidev e li salva nella cartella del lavoro.
+# Se qualcosa va storto scrive jobs/ID/error.txt, così Synapse lo sa subito.
+name: Slidev export
+
+on:
+  push:
+    paths:
+      - 'jobs/*/slides.md'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: slides-export
+  cancel-in-progress: false
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Trova i lavori nuovi
+        run: |
+          git diff-tree --root --no-commit-id --name-only -r "$GITHUB_SHA" \
+            | grep -E '^jobs/[^/]+/slides\.md$' > /tmp/jobs.txt || true
+          echo "Lavori:"; cat /tmp/jobs.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Installa Slidev e Chromium
+        run: |
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+
+      - name: Esporta PDF e PNG
+        run: |
+          while read -r f; do
+            [ -z "$f" ] && continue
+            d=$(dirname "$f"); id=$(basename "$d"); w="work/$id"; tmp=$(mktemp -d)
+            rm -f "$d/error.txt"
+            : > "$tmp/log.txt"
+            if node theme/prepare.mjs "$d" "$w" >> "$tmp/log.txt" 2>&1 \
+               && (cd "$w" && npx slidev export slides.md --format pdf --output "$tmp/slides.pdf" --timeout 90000 --wait 2000) >> "$tmp/log.txt" 2>&1 \
+               && [ -s "$tmp/slides.pdf" ]; then
+              cp "$tmp/slides.pdf" "$d/slides.pdf"
+              # i PNG servono solo alla verifica: se falliscono il PDF resta valido
+              (cd "$w" && npx slidev export slides.md --format png --output "$tmp/png" --timeout 90000 --wait 2000) >> "$tmp/log.txt" 2>&1 || true
+              rm -rf "$d/png"; mkdir -p "$d/png"; n=0
+              for p in $(find "$tmp/png" -name '*.png' 2>/dev/null | sort -V); do
+                n=$((n+1)); cp "$p" "$d/png/$(printf '%02d' "$n").png"
+              done
+              [ "$n" -eq 0 ] && rmdir "$d/png"
+            else
+              tail -n 40 "$tmp/log.txt" > "$d/error.txt"
+            fi
+          done < /tmp/jobs.txt
+
+      - name: Salva i risultati nel repository
+        if: always()
+        run: |
+          git config user.name "slides-bot"
+          git config user.email "slides-bot@users.noreply.github.com"
+          while read -r f; do
+            [ -z "$f" ] && continue
+            d=$(dirname "$f")
+            if [ ! -f "$d/slides.pdf" ] && [ ! -f "$d/error.txt" ]; then
+              echo "Il workflow GitHub Actions è fallito prima dell'esportazione: guarda la scheda Actions del repository." > "$d/error.txt"
+            fi
+          done < /tmp/jobs.txt
+          git add jobs
+          git diff --cached --quiet && exit 0
+          git commit -m "Slidev: risultati"
+          for i in 1 2 3; do
+            git pull --rebase origin "$GITHUB_REF_NAME" && git push origin "HEAD:$GITHUB_REF_NAME" && break
+            sleep 3
+          done
