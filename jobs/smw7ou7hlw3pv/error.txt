@@ -1,0 +1,1 @@
+The theme "@slidev/theme-seriph" was not found and cannot prompt for installation
