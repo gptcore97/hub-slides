@@ -1,0 +1,11 @@
+{
+  "name": "hub-slides",
+  "private": true,
+  "description": "Esportazione PDF/PNG delle presentazioni Synapse con Slidev",
+  "type": "module",
+  "dependencies": {
+    "@slidev/cli": "latest",
+    "@slidev/theme-default": "latest",
+    "playwright-chromium": "latest"
+  }
+}

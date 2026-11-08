@@ -1,0 +1,136 @@
+/* ===== SYNAPSE THEME — scuro, tipografico, con schede e numeri grandi ===== */
+:root { --bg0:#0b1020; --bg1:#141a33; --ink:#f4f6ff; --mut:#a9b2d6; --a:#8b5cf6; --b:#22d3ee; --c:#f472b6; }
+.pal-violet{--a:#8b5cf6;--b:#22d3ee;--c:#f472b6;--bg0:#0b1020;--bg1:#171a3b}
+.pal-sand{--a:#f59e0b;--b:#fb7185;--c:#fde68a;--bg0:#150f08;--bg1:#2a1b0c}
+.pal-ocean{--a:#38bdf8;--b:#34d399;--c:#818cf8;--bg0:#06121f;--bg1:#0c2740}
+.pal-forest{--a:#34d399;--b:#a3e635;--c:#fbbf24;--bg0:#06150f;--bg1:#0d2a1f}
+.pal-rose{--a:#fb7185;--b:#f59e0b;--c:#c084fc;--bg0:#1a0a12;--bg1:#34122a}
+.pal-royal{--a:#facc15;--b:#60a5fa;--c:#f472b6;--bg0:#0a0f24;--bg1:#18204a}
+
+.slidev-layout.syn{position:relative;overflow:hidden;color:var(--ink);padding:0;font-family:'Plus Jakarta Sans','Inter','Segoe UI',system-ui,sans-serif;
+  background:radial-gradient(900px 520px at 85% -10%,color-mix(in srgb,var(--a) 38%,transparent),transparent 60%),
+             radial-gradient(700px 480px at -10% 110%,color-mix(in srgb,var(--b) 26%,transparent),transparent 60%),
+             linear-gradient(135deg,var(--bg0),var(--bg1));}
+.syn .in{position:absolute;inset:0;padding:46px 56px 40px;display:flex;flex-direction:column}
+.syn .ring{position:absolute;border-radius:50%;border:2px solid color-mix(in srgb,var(--a) 45%,transparent);pointer-events:none}
+.syn .num{position:absolute;right:28px;bottom:16px;font-size:12px;letter-spacing:.12em;color:var(--mut);opacity:.7}
+
+/* titoli */
+.syn h1{font-size:40px;line-height:1.08;font-weight:800;letter-spacing:-.02em;margin:0 0 6px;color:#fff;background:none;-webkit-text-fill-color:initial}
+.syn h1::before{content:"";display:block;width:54px;height:6px;border-radius:6px;margin-bottom:14px;background:linear-gradient(90deg,var(--a),var(--b))}
+.syn h2{font-size:22px;font-weight:700;color:var(--b);margin:0 0 8px}
+.syn p{font-size:20px;line-height:1.45;color:var(--mut);margin:8px 0}
+.syn strong{color:#fff;font-weight:800}
+.syn em{color:var(--c);font-style:normal;font-weight:600}
+
+/* elenchi = schede */
+.syn ul{list-style:none;padding:0;margin:22px 0 0;display:grid;grid-template-columns:repeat(2,1fr);grid-auto-rows:minmax(0,1fr);gap:16px;flex:1;align-content:stretch;counter-reset:k;max-height:330px}
+.syn ul>li{position:relative;counter-increment:k;margin:0;padding:18px 24px;border-radius:20px;font-size:20px;line-height:1.4;color:#c9d0ee;display:flex;flex-direction:column;justify-content:center;
+  background:linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.13);box-shadow:0 10px 34px rgba(0,0,0,.28)}
+.syn ul>li::marker{content:""}
+.syn ul>li::after{content:counter(k,decimal-leading-zero);position:absolute;right:18px;top:10px;font-size:34px;font-weight:800;color:rgba(255,255,255,.08)}
+.syn ul>li>strong:first-child{display:block;font-size:24px;line-height:1.15;color:#fff;margin-bottom:6px}
+.syn ul.one{grid-template-columns:1fr}
+.syn ul:has(>li:nth-child(3):last-child){grid-template-columns:repeat(3,1fr);max-height:290px}
+.syn ul:has(>li:nth-child(5)){max-height:340px}
+.syn ul:has(>li:nth-child(5):last-child){grid-template-columns:repeat(2,1fr)}
+.syn ul:has(>li:nth-child(1):last-child){grid-template-columns:1fr}
+
+/* layout cards: schede alte con linea di colore in alto */
+.syn.cards ul>li{border-top:4px solid var(--a);padding-top:18px}
+.syn.cards ul>li:nth-child(2){border-top-color:var(--b)}
+.syn.cards ul>li:nth-child(3){border-top-color:var(--c)}
+.syn.cards ul>li:nth-child(4){border-top-color:var(--a)}
+
+/* layout stats: numeri giganti */
+.syn.stats ul{grid-template-columns:repeat(3,1fr);gap:18px;align-content:center;max-height:300px;margin-top:30px}
+.syn.stats ul:has(>li:nth-child(2):last-child){grid-template-columns:repeat(2,1fr)}
+.syn.stats ul>li{text-align:center;align-items:center;padding:26px 16px;font-size:19px}
+.syn.stats ul>li::after{display:none}
+.syn.stats ul>li>strong:first-child{font-size:64px;line-height:1.02;font-weight:800;margin:0 0 10px;background:linear-gradient(90deg,var(--a),var(--b));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+
+/* layout timeline */
+.syn.timeline ul{display:flex;flex-direction:column;justify-content:space-between;position:relative;margin-top:22px;padding-left:34px;max-height:350px;gap:12px}
+.syn.timeline ul::before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:3px;border-radius:3px;background:linear-gradient(var(--a),var(--b))}
+.syn.timeline ul>li{position:relative;flex:1;margin:0;padding:10px 22px;font-size:21px;flex-direction:row;align-items:center;justify-content:flex-start}
+.syn.timeline ul>li::after{display:none}
+.syn.timeline ul>li::before{content:"";position:absolute;left:-34px;top:50%;width:15px;height:15px;margin-top:-8px;border-radius:50%;background:var(--bg0);border:4px solid var(--b)}
+.syn.timeline ul>li>strong:first-child{display:inline-block;min-width:130px;font-size:22px;color:var(--c);margin:0 14px 0 0}
+
+/* foto */
+.syn .photo{position:absolute;top:0;bottom:0;width:42%;background-size:cover;background-position:center}
+.syn .photo.r{right:0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 24%);mask-image:linear-gradient(90deg,transparent,#000 24%)}
+.syn .photo.l{left:0;-webkit-mask-image:linear-gradient(270deg,transparent,#000 24%);mask-image:linear-gradient(270deg,transparent,#000 24%)}
+.syn .photo.empty{background:radial-gradient(circle at 40% 40%,color-mix(in srgb,var(--a) 55%,transparent),transparent 62%)}
+.syn .photo .big{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:150px;opacity:.9;filter:drop-shadow(0 10px 30px rgba(0,0,0,.4))}
+.syn.imgr .in{padding-right:46%}
+.syn.imgl .in{padding-left:46%}
+.syn.imgr ul,.syn.imgl ul{grid-template-columns:1fr!important;gap:10px}
+.syn.imgr ul>li,.syn.imgl ul>li{padding:12px 20px;font-size:18px}
+.syn.imgr ul>li::after,.syn.imgl ul>li::after{display:none}
+.syn.imgr ul>li>strong:first-child,.syn.imgl ul>li>strong:first-child{font-size:21px}
+
+/* cover / section / end / quote */
+.syn.cover .in{justify-content:center;padding-right:46%}
+.syn.cover.noimg .in{padding-right:56px}
+.syn.cover h1{font-size:66px;line-height:1.0}
+.syn.cover h1::before{width:80px;height:8px}
+.syn.cover p{font-size:26px;color:#d6dcf5;max-width:560px}
+.syn.cover .tag{display:inline-block;align-self:flex-start;margin-bottom:18px;padding:6px 14px;border-radius:99px;font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--bg0);background:linear-gradient(90deg,var(--a),var(--b))}
+.syn.section .in{justify-content:center;align-items:flex-start}
+.syn.section .nr{font-size:150px;font-weight:800;line-height:.9;background:linear-gradient(135deg,var(--a),var(--b));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;margin-bottom:6px}
+.slidev-layout.syn.section h1{font-size:58px;font-weight:800;color:#fff}
+.syn.section h1::before{display:none}
+.syn.quote .in{justify-content:center;padding:60px 90px}
+.syn.quote blockquote,.slidev-layout.syn blockquote{background:transparent!important;border:0!important;box-shadow:none!important;margin:0;padding:0;font-size:36px;line-height:1.26;font-weight:700;color:#fff!important;quotes:none}
+.syn.quote blockquote p{font-size:36px;color:#fff!important;margin:0;background:transparent}
+.syn.quote .qm{font-size:90px;line-height:.6;color:var(--a);font-weight:800;margin-bottom:14px}
+.slidev-layout.syn.quote h1{font-size:22px;color:var(--b);margin-top:28px;font-weight:600;letter-spacing:.02em}
+.syn.quote h1::after{content:'';}
+.syn.quote h1::before{display:none}
+.syn.end .in{justify-content:center;align-items:center;text-align:center}
+.syn.end h1{font-size:72px}
+.syn.end h1::before{margin:0 auto 18px}
+.syn.end p{font-size:24px}
+
+/* nota per chi presenta: mai nella slide */
+.syn .slidev-note{display:none}
+
+/* fullimage: foto a tutto schermo con titolo in basso */
+.syn.full .bg{position:absolute;inset:0;background-size:cover;background-position:center}
+.syn.full .bg.empty{background:radial-gradient(circle at 70% 35%,color-mix(in srgb,var(--a) 60%,transparent),transparent 60%)}
+.syn.full .bg .big{position:absolute;right:90px;top:70px;font-size:190px;filter:drop-shadow(0 12px 40px rgba(0,0,0,.5))}
+.syn.full .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05) 30%,rgba(5,8,20,.88) 100%)}
+.syn.full .in{justify-content:flex-end;padding-bottom:50px}
+.syn.full h1{font-size:56px}
+.syn.full p{font-size:24px;color:#e4e8ff;max-width:640px}
+
+/* compare: due colonne con titolo in alto */
+.syn.compare .in{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto 1fr;column-gap:22px;align-content:start}
+.syn.compare .l,.syn.compare .r{display:contents}
+.syn.compare h1{grid-column:1/-1;grid-row:1}
+.syn.compare .l>h2{grid-column:1;grid-row:2}.syn.compare .l>ul{grid-column:1;grid-row:3}
+.syn.compare .r>h2{grid-column:2;grid-row:2}.syn.compare .r>ul{grid-column:2;grid-row:3}
+.syn.compare h2{margin:16px 0 0;font-size:26px;color:var(--b);font-weight:800}
+.syn.compare ul{grid-template-columns:1fr!important;margin-top:12px;gap:12px;max-height:300px}
+.syn.compare ul>li{padding:12px 20px;font-size:18px}
+.syn.compare ul>li>strong:first-child{font-size:20px}
+.syn.compare ul>li::after{display:none}
+
+/* rifiniture: cerchi dietro al contenuto, contrasto dei sottotitoli, respiro in copertina */
+.syn .ring{z-index:0;opacity:.55}
+.syn .photo{z-index:1}
+.syn .in{z-index:2}
+.slidev-layout.syn.cover p{color:#e6eaff;opacity:1;margin-top:18px;line-height:1.35}
+.slidev-layout.syn.full p{color:#fff;opacity:.95;margin-top:12px;text-shadow:0 2px 14px rgba(0,0,0,.6)}
+.slidev-layout.syn.full h1{text-shadow:0 4px 24px rgba(0,0,0,.55)}
+.syn.imgr ul,.syn.imgl ul{max-height:360px}
+.syn.imgr ul>li,.syn.imgl ul>li{font-size:19px}
+.syn.cover .tag{margin-bottom:22px}
+.syn.imgr ul:has(>li:nth-child(4)),.syn.imgl ul:has(>li:nth-child(4)){gap:8px}
+.syn.imgr ul:has(>li:nth-child(4))>li,.syn.imgl ul:has(>li:nth-child(4))>li{padding:7px 16px;font-size:15.5px;line-height:1.3}
+.syn.imgr ul:has(>li:nth-child(4))>li>strong:first-child,.syn.imgl ul:has(>li:nth-child(4))>li>strong:first-child{font-size:17px;margin-bottom:1px}
+.syn.stats ul>li>strong:first-child{white-space:nowrap}
+.syn.stats .m{font-size:46px}
+.syn.stats .s{font-size:36px}
+.slidev-layout.syn.section p{color:#c9d0ee;font-size:24px;margin-top:14px}
