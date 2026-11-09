@@ -1,0 +1,91 @@
+---
+theme: default
+title: "Verbi: La Macchina del Tempo"
+palette: violet
+colorSchema: dark
+fonts:
+  sans: Plus Jakarta Sans
+  weights: "400,600,700,800"
+transition: slide-left
+layout: cover
+---
+
+# Verbi: La Macchina del Tempo
+
+Come le strutture linguistiche costruiscono la nostra realtà interiore.
+
+---
+layout: section
+---
+
+# 01
+# Il Motore del Tempo
+
+Organizzare il caos degli eventi in sequenza narrativa.
+
+---
+layout: image-left
+image: "https://images.unsplash.com/photo-1456513080540-59b867c336b1?q=80&w=1000"
+---
+
+# La Struttura del Verbo
+
+- **Fulcro dell'azione** Il termine latino 'verbum' identifica la parola come centro del pensiero.
+- **Profondità di campo** Tempi composti permettono di incastrare azioni diverse per precisione narrativa.
+- **Software cognitivo** I verbi sono strumenti per simulare, ricordare e pianificare il domani.
+
+---
+layout: stats
+---
+
+# La Geometria Verbale
+
+- **3 Modi Finiti** Indicativo, congiuntivo e condizionale che legano l'azione al soggetto.
+- **3 Modi Indefiniti** Infinito, participio e gerundio che isolano l'azione dal tempo cronologico.
+
+---
+layout: compare
+---
+
+# La Dialettica della Realtà
+
+## Indicativo
+- Il modo dell'oggettività
+- Definisce i fatti concreti
+
+::right::
+
+## Congiuntivo
+- Il modo della soggettività
+- Esprime il dubbio e l'ipotesi
+
+---
+layout: default
+---
+
+# Archeologia della Memoria
+
+<div class="grid grid-cols-1 gap-4 mt-8">
+
+- **Imperfetto**: Descrive la continuità e le scene vissute nel passato.
+- **Passato Prossimo**: Eventi conclusi ma ancora attivi nel presente.
+- **Passato Remoto**: Azioni sigillate, percepite come distanti dal momento attuale.
+
+</div>
+
+---
+layout: fullimage
+image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2000"
+---
+
+# Il futuro è immaginazione pura
+
+Un progetto neuronale che sfida la linearità del tempo.
+
+---
+layout: end
+---
+
+# I limiti del linguaggio sono i limiti del mondo
+
+Costruite la vostra realtà con consapevolezza.
