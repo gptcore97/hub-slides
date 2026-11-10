@@ -266,6 +266,12 @@ select.inp{appearance:none}
 .syn .ba svg{width:16px;height:16px}
 .syn .ba button:disabled{opacity:.6}
 .av.syn-av{background:linear-gradient(135deg,#7c3aed,#06b6d4)}
+.syn .bl{display:flex;flex-direction:column;gap:8px;padding:12px;max-height:320px;overflow-y:auto}
+.syn .bl button{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:11px 14px;border-radius:14px;background:var(--pill);border:1px solid var(--line)}
+.syn .bl button:hover{background:var(--hover)}
+.syn .bl .t{min-width:0;flex:1}
+.syn .bl b{display:block;font-size:13px;font-weight:600;color:#f4f4f5;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.syn .bl small{display:block;font-size:11px;color:var(--dark);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -911,7 +917,7 @@ select.inp{appearance:none}
 
   // ============================================================ MOTORE ATTIVO + TENDINA
   const SYN = 'synapse';
-  const synEntry = () => ({ synapse: true, provider: SYN, provider_name: 'Synapse', model: 'Gemini/Qwen → Slidev → Presenton', vision: true, keyless: true });
+  const synEntry = () => ({ synapse: true, provider: SYN, provider_name: 'Synapse', model: 'Qualsiasi modello → Slidev → Presenton', vision: true, keyless: true });
   const engineList = () => Object.entries(config.api_models);            // solo le API aggiunte dall'utente
   const allEngines = () => [[SYN, synEntry()], ...engineList()];          // synapse + le altre
   function engine() {
@@ -1433,7 +1439,7 @@ select.inp{appearance:none}
         const act = engine() && engine()[0], added = engineList();
         let h = S.msg ? noteH(S.msg.kind, S.msg.text) : '';
         h += `<div class="sec" style="margin-top:6px">IA configurate · ${added.length + 1}</div>` +
-          `<div class="row" ${isAdm() ? 'data-act="syn" style="cursor:pointer"' : ''}><span class="av syn-av">S</span><div class="t"><b>synapse</b><small>Gemini/Qwen → Slidev → Presenton</small></div><span class="bd free">predefinita</span>${act === SYN ? '<span class="ks ok">attiva</span>' : `<button class="mini" data-act="use" data-a="${SYN}" title="Usa">${I.check}</button>`}${I.chev}</div>`;
+          `<div class="row" ${isAdm() ? 'data-act="syn" style="cursor:pointer"' : ''}><span class="av syn-av">S</span><div class="t"><b>synapse</b><small>Qualsiasi modello → Slidev → Presenton</small></div><span class="bd free">predefinita</span>${act === SYN ? '<span class="ks ok">attiva</span>' : `<button class="mini" data-act="use" data-a="${SYN}" title="Usa">${I.check}</button>`}${I.chev}</div>`;
         h += added.length ? added.map(([a, e]) => `<div class="row"><span class="av" style="background:${color(a)}">${esc(a[0].toUpperCase())}</span><div class="t"><b>${esc(a)}</b><small>${esc(e.provider_name || e.provider)} · ${esc(e.model)}</small></div>${a === act ? '<span class="ks ok">attiva</span>' : `<button class="mini" data-act="use" data-a="${esc(a)}" title="Usa">${I.check}</button>`}${isAdm() ? `<button class="mini" data-act="vis" data-a="${esc(a)}" title="Immagini ${e.vision ? 'attive' : 'disattivate'}" style="${e.vision ? '' : 'opacity:.35'}">👁</button><button class="mini" data-act="rm" data-a="${esc(a)}" title="Rimuovi">${I.trash}</button>` : ''}</div>`).join('')
           : '<div class="card" style="font-size:13px;color:var(--muted);line-height:1.55">' + (isAdm() ? 'Non hai ancora nessuna API. Scegli un provider qui sotto, incolla la chiave e seleziona un modello: comparirà nel menu in alto.' : 'Nessun modello è stato ancora aggiunto: chiedi al rappresentante.') + '</div>';
         if (isAdm()) {
@@ -1465,12 +1471,14 @@ select.inp{appearance:none}
       },
       syn() {
         const sy = config.synapse, br = pickBrain();
-        const opts = ['<option value="auto">Auto (prima Gemini, poi Qwen)</option>'].concat(engineList().map(([a, e]) => `<option value="${esc(a)}">${esc(a)} · ${esc(e.model)}</option>`)).join('');
+        const opts = ['<option value="auto">Chiedi ogni volta (lista dei modelli attivi)</option>'].concat(engineList().map(([a, e]) => `<option value="${esc(a)}">${esc(a)} · ${esc(e.model)}</option>`)).join('');
         const hasP = !!String(config.api_keys.presenton || '').trim();
         return `<p class="big">Synapse</p>` +
-          noteH('info', 'Tre IA lavorano insieme. Il cervello (Gemini o Qwen) riassume il contenuto e scrive le slide. Slidev le impagina e crea il PDF tramite GitHub Actions. Poi il cervello controlla le immagini e, se serve, rimanda indietro una versione corretta. Se Slidev non parte, si passa a Presenton.') +
+          noteH('info', 'Tre IA lavorano insieme. Il cervello (un qualsiasi modello già attivo, lo scegli tu da una lista) riassume il contenuto e scrive le slide. Slidev le impagina e crea il PDF tramite GitHub Actions. Poi il cervello controlla le immagini e, se serve, rimanda indietro una versione corretta. Se Slidev non parte, si passa a Presenton.') +
           `<div class="sec">1 · Cervello</div>` +
-          (br ? noteH('ok', 'In uso: ' + br[0] + ' · ' + br[1].model) : noteH('warn', 'Nessun modello Gemini o Qwen aggiunto: aggiungine uno dai provider qui sotto (per esempio Google Gemini o OpenRouter).')) +
+          (br ? noteH('ok', 'Fisso: ' + br[0] + ' · ' + br[1].model + ' (non viene chiesto)')
+            : engineList().length ? noteH('info', 'A ogni presentazione scegli il modello da una lista dei ' + engineList().length + ' attivi. Se ne imposti uno qui sotto, userà sempre quello.')
+            : noteH('warn', 'Nessun modello attivo: aggiungine uno dai provider qui sotto.')) +
           `<select class="inp" id="synBrain">${opts}</select>` +
           `<div class="sec">2 · Slidev (GitHub Actions)</div>` +
           (syncUrl() ? noteH('ok', 'Apps Script collegato.') : noteH('warn', 'URL di Apps Script mancante: nell\'HUB arriva in automatico, qui puoi inserirlo a mano.')) +
@@ -1828,7 +1836,7 @@ select.inp{appearance:none}
     saveCfg(); toast('Config importato (' + n + ' chiavi, ' + Object.keys(config.api_models).length + ' API)');
   }
 
-  // ============================================================ SYNAPSE (cervello Gemini/Qwen -> Slidev -> ripiego Presenton)
+  // ============================================================ SYNAPSE (cervello a scelta -> Slidev -> ripiego Presenton)
   let hubSync = '', sleepStop = null;
   const sleep = ms => new Promise(res => { const t = setTimeout(res, ms); sleepStop = () => { clearTimeout(t); res(); }; });
   const syncUrl = () => String((config.synapse && config.synapse.sync_url) || hubSync || '').trim();
@@ -1862,11 +1870,10 @@ select.inp{appearance:none}
     return t;
   }
 
+  // cervello fisso scelto nelle impostazioni (qualsiasi modello attivo); null = chiedere ogni volta
   function pickBrain() {
-    const want = config.synapse.brain, list = engineList();
-    if (want && want !== 'auto' && config.api_models[want]) return [want, config.api_models[want]];
-    const rank = e => /gemini/i.test(e[1].model) ? 0 : /qwen/i.test(e[1].model) ? 1 : 9;
-    return list.filter(e => rank(e) < 9).sort((a, b) => rank(a) - rank(b))[0] || null;
+    const want = config.synapse.brain;
+    return (want && want !== 'auto' && config.api_models[want]) ? [want, config.api_models[want]] : null;
   }
 
   const CMT_OPEN = '<' + '!--', CMT_CLOSE = '--' + '>';
@@ -2285,8 +2292,14 @@ REGOLE DI REGIA: (1) segui un arco: apertura che incuriosisce, sviluppo a capito
   async function synapseRun(o) {
     const sy = config.synapse, node = o.node;
     const st = t => { const s = document.createElement('span'); s.textContent = t; node.stat.appendChild(s); main.scrollTop = main.scrollHeight; return s; };
-    const brain = pickBrain();
-    if (!brain) throw new Error('Synapse ha bisogno di un cervello: aggiungi un modello Gemini o Qwen dallo Store API.');
+    // il cervello: qualsiasi modello già attivo. Fisso nelle impostazioni, altrimenti lo sceglie l'utente da una lista (se ce n'è uno solo, niente domanda)
+    const models = engineList();
+    if (!models.length) throw new Error('Synapse ha bisogno di un modello: aggiungine uno dallo Store API.');
+    let brain = pickBrain();
+    if (!brain) {
+      if (models.length === 1) brain = models[0];
+      else { brain = await askBrain(node, models); if (!brain) throw new Error('interrotto'); }
+    }
     const [bAlias, bEntry] = brain, bKey = C.resolveKey(config, bEntry.key_id || bEntry.provider, C.PROVIDERS[bEntry.provider]);
     if (!bKey && !bEntry.keyless) throw new Error('Chiave mancante per ' + (bEntry.provider_name || bEntry.provider) + ' (cervello di Synapse).');
     // il cervello chiede all'utente quale motore usare (salta la domanda se l'ha già scritto nella richiesta)
@@ -2315,6 +2328,19 @@ REGOLE DI REGIA: (1) segui un arco: apertura che incuriosisce, sviluppo a capito
       const slidevLine = engine === 'presenton' ? '' : '- Slidev: ' + why + '\n';
       return { role: 'assistant', content: '⚠️ Non sono riuscito a creare il file.\n\n' + slidevLine + '- Presenton: ' + e.message + '\n\nHo comunque scritto le slide: copiale o riprova.\n\n```markdown\n' + md + '\n```', src: [], skip: true };
     }
+  }
+
+  // lista tappabile dei modelli già attivi (nessuno nuovo da attivare): risolve [alias, entry] | null (se interrotto)
+  function askBrain(node, models) {
+    return new Promise(resolve => {
+      node.txt.innerHTML = `<div class="syn"><div class="sh2"><b>🧠 Con quale modello creo la presentazione?</b><small>Tocca uno dei modelli attivi</small></div><div class="bl">` +
+        models.map(([a, e]) => `<button type="button" data-brain="${esc(a)}"><span class="dot" style="background:${color(a)}"></span><span class="t"><b>${esc(a)}</b><small>${esc(e.provider_name || e.provider)} · ${esc(e.model)}${e.vision ? ' · 👁 immagini' : ''}</small></span></button>`).join('') +
+        `</div></div>`;
+      const done = v => { sleepStop = null; node.txt.onclick = null; resolve(v); };
+      sleepStop = () => done(null);            // il pulsante "stop" annulla la domanda
+      node.txt.onclick = e => { const b = e.target.closest('[data-brain]'); if (b && config.api_models[b.dataset.brain]) done([b.dataset.brain, config.api_models[b.dataset.brain]]); };
+      main.scrollTop = main.scrollHeight;
+    });
   }
 
   // il cervello chiede quale motore usare: due pulsanti nella chat, risolve 'slidev' | 'presenton' | null (se interrotto)
