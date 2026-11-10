@@ -1,9 +1,8 @@
 <script setup lang="ts">
-const props = defineProps({ image: String, icon: String, nr: [String, Number], tag: String })
+const props = defineProps({ image: String, icon: String, nr: [String, Number], tag: String, values: String, value: [String, Number], x: String, y: String })
 </script>
 <template>
-  <div class="slidev-layout syn imgl" :class="`pal-${$slidev.configs.palette || 'violet'}`">
-    <div class="photo l" :class="{ empty: !props.image }" :style="props.image ? { backgroundImage: `url(${props.image})` } : {}"><div v-if="!props.image" class="big">{{ props.icon || '✦' }}</div></div>
-    <div class="in"><slot /></div>
+  <div class="slidev-layout syn image-left" :class="`pal-${$slidev.configs.palette || 'violet'}`">
+    <div class="photo l" :class="{ empty: !props.image }" :style="props.image ? { backgroundImage: `url(${props.image})` } : {}"><div v-if="!props.image" class="big">{{ props.icon || '✦' }}</div></div><div class="in"><slot /></div>
   </div>
 </template>
