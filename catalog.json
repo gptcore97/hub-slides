@@ -1,0 +1,560 @@
+[
+ {
+  "name": "cover",
+  "family": "Aperture",
+  "use": "Prima slide. Titolo grande a sinistra, foto a tutta altezza a destra (senza foto: pannello colorato con emoji gigante).",
+  "count": "titolo + 1 frase",
+  "needs_image": true,
+  "props": [
+   "tag",
+   "icon",
+   "image"
+  ],
+  "n": [
+   0,
+   0
+  ],
+  "example": "---\nlayout: cover\ntag: \"Storia antica\"\nicon: \"🏺\"\nimage: Great Pyramid of Giza at sunset\n---\n\n# La civiltà egizia\n\nTremila anni di faraoni, templi e un fiume che dava la vita"
+ },
+ {
+  "name": "cover-center",
+  "family": "Aperture",
+  "use": "Prima slide alternativa, centrata. Foto a tutto schermo scurita (senza foto: campo di colore pieno).",
+  "count": "titolo + 1 frase",
+  "needs_image": true,
+  "props": [
+   "tag",
+   "icon",
+   "image"
+  ],
+  "n": [
+   0,
+   0
+  ],
+  "example": "---\nlayout: cover-center\ntag: \"Scienze e ambiente\"\nicon: \"⚡\"\nimage: Great Pyramid of Giza at sunset\n---\n\n# Il futuro dell'energia\n\nDal sole al vento: come cambierà il modo in cui accendiamo la luce"
+ },
+ {
+  "name": "agenda",
+  "family": "Aperture",
+  "use": "Indice della presentazione: pannello colorato a sinistra, capitoli numerati a destra.",
+  "count": "3-5 voci \"**Capitolo** frase breve\"",
+  "needs_image": false,
+  "props": [],
+  "n": [
+   4,
+   5
+  ],
+  "example": "---\nlayout: agenda\n---\n\n# Di cosa parliamo\n\nTre capitoli, venti minuti\n\n- **Piene annuali** Il fiume allagava i campi e lasciava limo fertile\n- **Agricoltura** Grano e orzo nutrivano un intero regno\n- **Trasporti** Si viaggiava in barca da nord a sud\n- **Scrittura** Geroglifici incisi su pietra e papiro"
+ },
+ {
+  "name": "section",
+  "family": "Capitoli",
+  "use": "Apre un capitolo. Campo di colore pieno con il numero gigante in trasparenza.",
+  "count": "numero capitolo (nr) + titolo + 1 frase",
+  "needs_image": false,
+  "props": [
+   "nr"
+  ],
+  "n": [
+   0,
+   0
+  ],
+  "example": "---\nlayout: section\nnr: 2\n---\n\n# Il dono del Nilo\n\nPerché un deserto è diventato un impero"
+ },
+ {
+  "name": "section-image",
+  "family": "Capitoli",
+  "use": "Apre un capitolo con una foto a tutto schermo scurita a sinistra.",
+  "count": "numero capitolo (nr) + titolo + 1 frase",
+  "needs_image": true,
+  "props": [
+   "nr",
+   "icon",
+   "image"
+  ],
+  "n": [
+   0,
+   0
+  ],
+  "example": "---\nlayout: section-image\nnr: 3\nicon: \"⛵\"\nimage: Great Pyramid of Giza at sunset\n---\n\n# La vita lungo il fiume\n\nVillaggi, campi e barche"
+ },
+ {
+  "name": "statement",
+  "family": "Messaggio",
+  "use": "Una sola frase forte, enorme. Per l'idea centrale o un cambio di tono.",
+  "count": "1 frase (max 14 parole) + 1 riga facoltativa",
+  "needs_image": false,
+  "props": [],
+  "n": [
+   0,
+   0
+  ],
+  "example": "---\nlayout: statement\n---\n\n# Il Nilo non era un fiume: era un calendario.\n\nOgni piena decideva quando seminare, costruire e pregare."
+ },
+ {
+  "name": "quote",
+  "family": "Messaggio",
+  "use": "Citazione autentica e nota, con autore. Il titolo \"# ...\" è chi parla.",
+  "count": "\"> frase\" + \"# Autore\"",
+  "needs_image": false,
+  "props": [],
+  "n": [
+   0,
+   0
+  ],
+  "example": "---\nlayout: quote\n---\n\n> Ho fatto sorgere un fiume dove prima c'era solo deserto.\n\n# Iscrizione reale"
+ },
+ {
+  "name": "callout",
+  "family": "Messaggio",
+  "use": "Idea chiave o consiglio da ricordare: icona grande, frase, dettaglio e 2-3 pillole facoltative.",
+  "count": "titolo + 1 frase + 0-3 pillole",
+  "needs_image": false,
+  "props": [
+   "icon"
+  ],
+  "n": [
+   0,
+   0
+  ],
+  "example": "---\nlayout: callout\nicon: \"💡\"\n---\n\n# Il limo era oro nero\n\nOgni anno la piena depositava uno strato fertile: senza concimi, il raccolto era garantito.\n\n- **Fertile** nessun concime\n- **Prevedibile** sempre a luglio"
+ },
+ {
+  "name": "default",
+  "family": "Elenchi",
+  "use": "Elenco standard di 3-5 punti, a righe con barra colorata. Il jolly quando nient'altro calza.",
+  "count": "3-5 voci",
+  "needs_image": false,
+  "props": [],
+  "n": [
+   4,
+   5
+  ],
+  "example": "---\nlayout: default\n---\n\n# Il dono del Nilo\n\n- **Piene annuali** Il fiume allagava i campi e lasciava limo fertile\n- **Agricoltura** Grano e orzo nutrivano un intero regno\n- **Trasporti** Si viaggiava in barca da nord a sud\n- **Scrittura** Geroglifici incisi su pietra e papiro"
+ },
+ {
+  "name": "cards",
+  "family": "Elenchi",
+  "use": "3-6 concetti paralleli e indipendenti, in schede con filo di colore.",
+  "count": "3-6 voci",
+  "needs_image": false,
+  "props": [],
+  "n": [
+   4,
+   6
+  ],
+  "example": "---\nlayout: cards\n---\n\n# Un regno, tanti pilastri\n\n- **Piene annuali** Il fiume allagava i campi e lasciava limo fertile\n- **Agricoltura** Grano e orzo nutrivano un intero regno\n- **Trasporti** Si viaggiava in barca da nord a sud\n- **Scrittura** Geroglifici incisi su pietra e papiro"
+ },
+ {
+  "name": "numbered",
+  "family": "Elenchi",
+  "use": "Classifica o ordine di importanza (i primi 3-5), con numeri grandi.",
+  "count": "3-5 voci",
+  "needs_image": false,
+  "props": [],
+  "n": [
+   3,
+   5
+  ],
+  "example": "---\nlayout: numbered\n---\n\n# I tre doni del fiume\n\n- **Piene annuali** Il fiume allagava i campi e lasciava limo fertile\n- **Agricoltura** Grano e orzo nutrivano un intero regno\n- **Trasporti** Si viaggiava in barca da nord a sud"
+ },
+ {
+  "name": "icons",
+  "family": "Elenchi",
+  "use": "2-5 caratteristiche con un'emoji grande in un cerchio. Ogni voce DEVE iniziare con l'emoji in grassetto.",
+  "count": "2-5 voci \"**🌊** **Etichetta** frase\"",
+  "needs_image": false,
+  "props": [],
+  "n": [
+   3,
+   5
+  ],
+  "example": "---\nlayout: icons\n---\n\n# Cosa dava il Nilo\n\n- **🌊** **Piene annuali** Il fiume allagava i campi e lasciava limo fertile\n- **🌾** **Agricoltura** Grano e orzo nutrivano un intero regno\n- **⛵** **Trasporti** Si viaggiava in barca da nord a sud"
+ },
+ {
+  "name": "checklist",
+  "family": "Elenchi",
+  "use": "Requisiti, regole, vantaggi, cose da fare: ogni voce ha la spunta.",
+  "count": "3-5 voci",
+  "needs_image": false,
+  "props": [],
+  "n": [
+   4,
+   5
+  ],
+  "example": "---\nlayout: checklist\n---\n\n# Come si costruiva una piramide\n\n- **Piene annuali** Il fiume allagava i campi e lasciava limo fertile\n- **Agricoltura** Grano e orzo nutrivano un intero regno\n- **Trasporti** Si viaggiava in barca da nord a sud\n- **Scrittura** Geroglifici incisi su pietra e papiro"
+ },
+ {
+  "name": "definitions",
+  "family": "Elenchi",
+  "use": "Glossario: termine a sinistra, spiegazione a destra.",
+  "count": "3-5 voci \"**Termine** spiegazione\"",
+  "needs_image": false,
+  "props": [],
+  "n": [
+   4,
+   5
+  ],
+  "example": "---\nlayout: definitions\n---\n\n# Parole chiave\n\n- **Faraone** Re e dio vivente, garante dell'ordine\n- **Papiro** Pianta da cui si ricavava il foglio per scrivere\n- **Stele** Lastra di pietra incisa con testi o leggi\n- **Mummia** Corpo conservato per la vita dopo la morte"
+ },
+ {
+  "name": "grid-6",
+  "family": "Elenchi",
+  "use": "4-6 elementi brevi in griglia a filetti: proprietà, funzioni, componenti.",
+  "count": "4-6 voci",
+  "needs_image": false,
+  "props": [],
+  "n": [
+   6,
+   6
+  ],
+  "example": "---\nlayout: grid-6\n---\n\n# Sei elementi, una civiltà\n\n- **Piene annuali** Il fiume allagava i campi e lasciava limo fertile\n- **Agricoltura** Grano e orzo nutrivano un intero regno\n- **Trasporti** Si viaggiava in barca da nord a sud\n- **Scrittura** Geroglifici incisi su pietra e papiro\n- **Commercio** Rotte verso il Levante e la Nubia\n- **Religione** Un pantheon legato al ciclo della natura"
+ },
+ {
+  "name": "steps",
+  "family": "Processi",
+  "use": "Procedura o sequenza in 3-5 passi, in orizzontale con cerchi numerati.",
+  "count": "3-5 voci",
+  "needs_image": false,
+  "props": [],
+  "n": [
+   4,
+   5
+  ],
+  "example": "---\nlayout: steps\n---\n\n# Dalla piena al raccolto\n\n- **Piene annuali** Il fiume allagava i campi e lasciava limo fertile\n- **Agricoltura** Grano e orzo nutrivano un intero regno\n- **Trasporti** Si viaggiava in barca da nord a sud\n- **Scrittura** Geroglifici incisi su pietra e papiro"
+ },
+ {
+  "name": "cycle",
+  "family": "Processi",
+  "use": "Ciclo che si ripete: esattamente 4 fasi con frecce che chiudono il cerchio.",
+  "count": "esattamente 4 voci",
+  "needs_image": false,
+  "props": [],
+  "n": [
+   4,
+   4
+  ],
+  "example": "---\nlayout: cycle\n---\n\n# Il ciclo dell'anno egizio\n\n- **Piene annuali** Il fiume allagava i campi e lasciava limo fertile\n- **Agricoltura** Grano e orzo nutrivano un intero regno\n- **Trasporti** Si viaggiava in barca da nord a sud\n- **Scrittura** Geroglifici incisi su pietra e papiro"
+ },
+ {
+  "name": "funnel",
+  "family": "Processi",
+  "use": "Selezione progressiva o filtro, dal più ampio al più stretto (3-5 livelli).",
+  "count": "3-5 voci, dal più largo",
+  "needs_image": false,
+  "props": [],
+  "n": [
+   4,
+   5
+  ],
+  "example": "---\nlayout: funnel\n---\n\n# Da migliaia di operai a un solo faraone\n\n- **Piene annuali** Il fiume allagava i campi e lasciava limo fertile\n- **Agricoltura** Grano e orzo nutrivano un intero regno\n- **Trasporti** Si viaggiava in barca da nord a sud\n- **Scrittura** Geroglifici incisi su pietra e papiro"
+ },
+ {
+  "name": "pyramid",
+  "family": "Processi",
+  "use": "Gerarchia o livelli, dalla punta alla base (3-4 livelli).",
+  "count": "3-4 voci, dalla punta alla base",
+  "needs_image": false,
+  "props": [],
+  "n": [
+   4,
+   4
+  ],
+  "example": "---\nlayout: pyramid\n---\n\n# La piramide sociale\n\n- **Faraone** Re e dio\n- **Visir e nobili** Governano il regno\n- **Scribi e sacerdoti** Custodi del sapere\n- **Contadini** La maggioranza della popolazione"
+ },
+ {
+  "name": "timeline",
+  "family": "Processi",
+  "use": "Cronologia verticale con date a sinistra (3-5 eventi in ordine).",
+  "count": "3-5 voci \"**data** evento\"",
+  "needs_image": false,
+  "props": [],
+  "n": [
+   5,
+   5
+  ],
+  "example": "---\nlayout: timeline\n---\n\n# Tremila anni in cinque date\n\n- **3100 a.C.** Unificazione di Alto e Basso Egitto\n- **2560 a.C.** Si costruisce la grande piramide di Giza\n- **1550 a.C.** Inizia il Nuovo Regno\n- **1274 a.C.** Battaglia di Qadesh contro gli Ittiti\n- **30 a.C.** Roma conquista l'Egitto"
+ },
+ {
+  "name": "timeline-h",
+  "family": "Processi",
+  "use": "Roadmap o cronologia orizzontale a 3-5 tappe.",
+  "count": "3-5 voci \"**anno** evento breve\"",
+  "needs_image": false,
+  "props": [],
+  "n": [
+   4,
+   5
+  ],
+  "example": "---\nlayout: timeline-h\n---\n\n# Le tappe del regno\n\n- **3100** Unificazione del regno\n- **2560** La piramide di Giza\n- **1550** Nuovo Regno\n- **1274** Battaglia di Qadesh"
+ },
+ {
+  "name": "stats",
+  "family": "Numeri e grafici",
+  "use": "Da 2 a 4 cifre chiave grandi, separate da filetti. Solo cifre certe.",
+  "count": "2-4 voci \"**numero breve** cosa significa\"",
+  "needs_image": false,
+  "props": [],
+  "n": [
+   3,
+   4
+  ],
+  "example": "---\nlayout: stats\n---\n\n# L'Egitto in numeri\n\n- **3000** anni di storia continua\n- **100+** piramidi conosciute\n- **70%** del paese è deserto"
+ },
+ {
+  "name": "stat-hero",
+  "family": "Numeri e grafici",
+  "use": "Una cifra protagonista gigante su campo colorato e 2 cifre di contorno.",
+  "count": "esattamente 3 voci (la prima è la protagonista)",
+  "needs_image": false,
+  "props": [],
+  "n": [
+   3,
+   3
+  ],
+  "example": "---\nlayout: stat-hero\n---\n\n# Il Nilo in cifre\n\n- **6650** chilometri: il fiume più lungo del mondo\n- **10** paesi attraversati\n- **95%** degli egiziani vive lungo le sue rive"
+ },
+ {
+  "name": "big-number",
+  "family": "Numeri e grafici",
+  "use": "UNA cifra enorme a tutto schermo su campo colorato. Il titolo è solo la cifra.",
+  "count": "\"# cifra\" (max 5 caratteri) + 1 frase",
+  "needs_image": false,
+  "props": [],
+  "n": [
+   0,
+   0
+  ],
+  "example": "---\nlayout: big-number\n---\n\n# 70%\n\nDegli studenti ricorda meglio ciò che ha visto in un'immagine"
+ },
+ {
+  "name": "bars",
+  "family": "Numeri e grafici",
+  "use": "Confronto di 3-5 percentuali con barre orizzontali. Serve il campo values con le percentuali nello stesso ordine.",
+  "count": "3-5 voci + values: \"82,64,41\"",
+  "needs_image": false,
+  "props": [
+   "values"
+  ],
+  "n": [
+   4,
+   5
+  ],
+  "example": "---\nlayout: bars\nvalues: \"82,64,41,27,12\"\n---\n\n# I linguaggi più usati\n\n- **Python** 82% dei progetti\n- **JavaScript** 64% dei progetti\n- **Java** 41% dei progetti\n- **C++** 27% dei progetti"
+ },
+ {
+  "name": "ring",
+  "family": "Numeri e grafici",
+  "use": "Una percentuale in un anello grande, con titolo e frase a destra. Serve il campo value (0-100).",
+  "count": "titolo + 1 frase + 0-3 voci + value: 72",
+  "needs_image": false,
+  "props": [
+   "value"
+  ],
+  "n": [
+   0,
+   0
+  ],
+  "example": "---\nlayout: ring\nvalue: 72\n---\n\n# Chi usa lo smartphone ogni giorno\n\nTra i ragazzi di 14-19 anni, quasi tre su quattro.\n\n- **Social** la scelta più frequente\n- **Video** al secondo posto"
+ },
+ {
+  "name": "table",
+  "family": "Numeri e grafici",
+  "use": "Dati a righe e colonne (tabella markdown, max 5 righe x 4 colonne).",
+  "count": "tabella markdown con intestazione",
+  "needs_image": false,
+  "props": [],
+  "n": [
+   3,
+   4
+  ],
+  "example": "---\nlayout: table\n---\n\n# Tre civiltà a confronto\n\n| Civiltà | Fiume | Scrittura |\n|---|---|---|\n| Egizi | Nilo | Geroglifici |\n| Sumeri | Tigri ed Eufrate | Cuneiforme |\n| Indo | Indo | Ancora non decifrata |\n"
+ },
+ {
+  "name": "compare",
+  "family": "Confronti",
+  "use": "Due colonne con intestazioni colorate. Dopo ::right:: va la seconda colonna.",
+  "count": "titolo + \"## A\" 2-3 voci + ::right:: + \"## B\" 2-3 voci",
+  "needs_image": false,
+  "props": [],
+  "n": [
+   2,
+   3
+  ],
+  "example": "---\nlayout: compare\n---\n\n# Egitto e Mesopotamia\n\n## Egitto\n\n- **Piene annuali** Il fiume allagava i campi e lasciava limo fertile\n- **Agricoltura** Grano e orzo nutrivano un intero regno\n\n::right::\n\n## Mesopotamia\n\n- **Piene annuali** Il fiume allagava i campi e lasciava limo fertile\n- **Agricoltura** Grano e orzo nutrivano un intero regno"
+ },
+ {
+  "name": "versus",
+  "family": "Confronti",
+  "use": "Due contendenti a tutto schermo con \"VS\" al centro. Niente titolo: solo i due \"##\".",
+  "count": "\"## A\" 3-4 voci + ::right:: + \"## B\" 3-4 voci (senza \"# titolo\")",
+  "needs_image": false,
+  "props": [],
+  "n": [
+   3,
+   4
+  ],
+  "example": "---\nlayout: versus\n---\n\n## Python\n\n- **Piene annuali** Il fiume allagava i campi e lasciava limo fertile\n- **Agricoltura** Grano e orzo nutrivano un intero regno\n- **Trasporti** Si viaggiava in barca da nord a sud\n\n::right::\n\n## JavaScript\n\n- **Piene annuali** Il fiume allagava i campi e lasciava limo fertile\n- **Agricoltura** Grano e orzo nutrivano un intero regno\n- **Trasporti** Si viaggiava in barca da nord a sud"
+ },
+ {
+  "name": "pros-cons",
+  "family": "Confronti",
+  "use": "Vantaggi contro svantaggi, con spunte verdi e croci rosse.",
+  "count": "titolo + \"## Vantaggi\" + ::right:: + \"## Svantaggi\"",
+  "needs_image": false,
+  "props": [],
+  "n": [
+   3,
+   4
+  ],
+  "example": "---\nlayout: pros-cons\n---\n\n# Costruire in pietra\n\n## Vantaggi\n\n- **Piene annuali** Il fiume allagava i campi e lasciava limo fertile\n- **Agricoltura** Grano e orzo nutrivano un intero regno\n- **Trasporti** Si viaggiava in barca da nord a sud\n\n::right::\n\n## Svantaggi\n\n- **Piene annuali** Il fiume allagava i campi e lasciava limo fertile\n- **Agricoltura** Grano e orzo nutrivano un intero regno\n- **Trasporti** Si viaggiava in barca da nord a sud"
+ },
+ {
+  "name": "before-after",
+  "family": "Confronti",
+  "use": "Prima e dopo, o problema e soluzione, con freccia al centro.",
+  "count": "titolo + \"## Prima\" + ::right:: + \"## Dopo\"",
+  "needs_image": false,
+  "props": [],
+  "n": [
+   3,
+   3
+  ],
+  "example": "---\nlayout: before-after\n---\n\n# Prima e dopo la diga\n\n## Prima\n\n- **Piene annuali** Il fiume allagava i campi e lasciava limo fertile\n- **Agricoltura** Grano e orzo nutrivano un intero regno\n- **Trasporti** Si viaggiava in barca da nord a sud\n\n::right::\n\n## Dopo\n\n- **Piene annuali** Il fiume allagava i campi e lasciava limo fertile\n- **Agricoltura** Grano e orzo nutrivano un intero regno\n- **Trasporti** Si viaggiava in barca da nord a sud"
+ },
+ {
+  "name": "quadrant",
+  "family": "Confronti",
+  "use": "Matrice 2x2 con due assi. Servono x e y (nomi degli assi) e 4 voci: alto-sx, alto-dx, basso-sx, basso-dx.",
+  "count": "titolo + 4 voci + x + y",
+  "needs_image": false,
+  "props": [
+   "x",
+   "y"
+  ],
+  "n": [
+   4,
+   4
+  ],
+  "example": "---\nlayout: quadrant\nx: \"Impegno\"\ny: \"Valore\"\n---\n\n# Che progetto scegliere?\n\n- **Subito** Poco sforzo, tanto valore\n- **Pianificare** Tanto sforzo, tanto valore\n- **Se avanza tempo** Poco sforzo, poco valore\n- **Evitare** Tanto sforzo, poco valore"
+ },
+ {
+  "name": "image-right",
+  "family": "Immagini",
+  "use": "Titolo e 3 punti a sinistra, foto a tutta altezza a destra.",
+  "count": "titolo + 3 voci",
+  "needs_image": true,
+  "props": [
+   "icon",
+   "image"
+  ],
+  "n": [
+   3,
+   3
+  ],
+  "example": "---\nlayout: image-right\nicon: \"☀️\"\nimage: Great Pyramid of Giza at sunset\n---\n\n# Religione e potere\n\n- **Piene annuali** Il fiume allagava i campi e lasciava limo fertile\n- **Agricoltura** Grano e orzo nutrivano un intero regno\n- **Trasporti** Si viaggiava in barca da nord a sud"
+ },
+ {
+  "name": "image-left",
+  "family": "Immagini",
+  "use": "Foto con angoli arrotondati a sinistra, testo a filetti a destra.",
+  "count": "titolo + 3 voci",
+  "needs_image": true,
+  "props": [
+   "icon",
+   "image"
+  ],
+  "n": [
+   3,
+   3
+  ],
+  "example": "---\nlayout: image-left\nicon: \"🏺\"\nimage: Great Pyramid of Giza at sunset\n---\n\n# La vita quotidiana\n\n- **Piene annuali** Il fiume allagava i campi e lasciava limo fertile\n- **Agricoltura** Grano e orzo nutrivano un intero regno\n- **Trasporti** Si viaggiava in barca da nord a sud"
+ },
+ {
+  "name": "image-top",
+  "family": "Immagini",
+  "use": "Fascia foto in alto, titolo e 2-3 colonne di testo sotto.",
+  "count": "titolo + 2-3 voci brevi",
+  "needs_image": true,
+  "props": [
+   "icon",
+   "image"
+  ],
+  "n": [
+   3,
+   3
+  ],
+  "example": "---\nlayout: image-top\nicon: \"🌊\"\nimage: Great Pyramid of Giza at sunset\n---\n\n# Un fiume, tre stagioni\n\n- **Piene annuali** Il fiume allagava i campi e lasciava limo fertile\n- **Agricoltura** Grano e orzo nutrivano un intero regno\n- **Trasporti** Si viaggiava in barca da nord a sud"
+ },
+ {
+  "name": "fullimage",
+  "family": "Immagini",
+  "use": "Foto a tutto schermo con titolo di impatto in basso. Per i momenti emotivi.",
+  "count": "titolo + 1 riga",
+  "needs_image": true,
+  "props": [
+   "icon",
+   "image"
+  ],
+  "n": [
+   0,
+   0
+  ],
+  "example": "---\nlayout: fullimage\nicon: \"🌅\"\nimage: Great Pyramid of Giza at sunset\n---\n\n# Dove la sabbia incontra il fiume\n\nIl Nilo vicino a Luxor, all'alba"
+ },
+ {
+  "name": "split",
+  "family": "Immagini",
+  "use": "Metà foto, metà campo colorato con titolo e punti. Molto deciso.",
+  "count": "titolo + 1 frase + 3 voci",
+  "needs_image": true,
+  "props": [
+   "icon",
+   "image"
+  ],
+  "n": [
+   3,
+   3
+  ],
+  "example": "---\nlayout: split\nicon: \"🌾\"\nimage: Great Pyramid of Giza at sunset\n---\n\n# Il lavoro dei campi\n\nTre stagioni scandivano tutto.\n\n- **Piene annuali** Il fiume allagava i campi e lasciava limo fertile\n- **Agricoltura** Grano e orzo nutrivano un intero regno\n- **Trasporti** Si viaggiava in barca da nord a sud"
+ },
+ {
+  "name": "code",
+  "family": "Testo e codice",
+  "use": "Un blocco di codice (max 10 righe) con una riga di spiegazione.",
+  "count": "titolo + 1 frase + blocco ```linguaggio",
+  "needs_image": false,
+  "props": [],
+  "n": [
+   0,
+   0
+  ],
+  "example": "---\nlayout: code\n---\n\n# Un ciclo in Python\n\nStampa i numeri da zero a quattro.\n\n```python\nfor i in range(5):\n    quadrato = i * i\n    print(\"numero\", i, \"quadrato\", quadrato)\n```"
+ },
+ {
+  "name": "two-col",
+  "family": "Testo e codice",
+  "use": "Testo continuo su due colonne (non una lista): per spiegazioni brevi.",
+  "count": "titolo + 2-3 paragrafi brevi",
+  "needs_image": false,
+  "props": [],
+  "n": [
+   0,
+   0
+  ],
+  "example": "---\nlayout: two-col\n---\n\n# Perché il Nilo contava\n\nOgni estate il fiume usciva dagli argini e copriva i campi di acqua. Quando si ritirava, lasciava un limo scuro e ricco di nutrienti.\n\nGli egizi chiamavano questa terra nera \"Kemet\" e il deserto intorno \"terra rossa\". Il confine fra le due era visibile a occhio nudo.\n\nLa stagione dell'inondazione apriva il calendario: da lì si contavano semina e raccolto."
+ },
+ {
+  "name": "end",
+  "family": "Chiusura",
+  "use": "Ultima slide, centrata su campo colorato.",
+  "count": "\"# Grazie\" + 1 riga",
+  "needs_image": false,
+  "props": [],
+  "n": [
+   0,
+   0
+  ],
+  "example": "---\nlayout: end\n---\n\n# Grazie\n\nDomande e curiosità"
+ }
+]
