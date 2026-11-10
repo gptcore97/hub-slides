@@ -1870,8 +1870,77 @@ select.inp{appearance:none}
   }
 
   const CMT_OPEN = '<' + '!--', CMT_CLOSE = '--' + '>';
-  const LAYOUTS = ['default', 'cover', 'cards', 'stats', 'timeline', 'image-right', 'image-left', 'fullimage', 'compare', 'section', 'quote', 'end'];
-  const PALETTES = ['violet', 'sand', 'ocean', 'forest', 'rose', 'royal'];
+  // ---- Synapse 2: 40 layout. Una sola tabella (LSPEC) dice a quale famiglia appartiene ogni layout e quante voci ammette.
+  const LSPEC = {
+    cover: { k: 'cover' }, 'cover-center': { k: 'cover' },
+    agenda: { k: 'list', min: 3, max: 5, sub: 1 }, section: { k: 'hero', nr: 1 }, 'section-image': { k: 'hero', nr: 1, img: 1 },
+    statement: { k: 'hero' }, quote: { k: 'quote' }, callout: { k: 'callout' },
+    default: { k: 'list', min: 1, max: 5 }, cards: { k: 'list', min: 3, max: 6 }, numbered: { k: 'list', min: 3, max: 5 }, icons: { k: 'list', min: 2, max: 5 },
+    checklist: { k: 'list', min: 3, max: 5 }, definitions: { k: 'list', min: 3, max: 5 }, 'grid-6': { k: 'list', min: 4, max: 6 },
+    steps: { k: 'list', min: 3, max: 5 }, cycle: { k: 'list', min: 4, max: 4 }, funnel: { k: 'list', min: 3, max: 5 }, pyramid: { k: 'list', min: 3, max: 4 },
+    timeline: { k: 'list', min: 3, max: 5 }, 'timeline-h': { k: 'list', min: 3, max: 5 },
+    stats: { k: 'list', min: 2, max: 4 }, 'stat-hero': { k: 'list', min: 3, max: 3 }, 'big-number': { k: 'hero' },
+    bars: { k: 'list', min: 3, max: 5 }, ring: { k: 'list', min: 0, max: 3, sub: 1 }, table: { k: 'table' },
+    compare: { k: 'two', max: 3 }, 'pros-cons': { k: 'two', max: 4 }, 'before-after': { k: 'two', max: 3 }, versus: { k: 'two', max: 4 },
+    quadrant: { k: 'list', min: 4, max: 4 },
+    'image-right': { k: 'list', min: 2, max: 3, img: 1 }, 'image-left': { k: 'list', min: 2, max: 3, img: 1 }, 'image-top': { k: 'list', min: 2, max: 3, img: 1 },
+    fullimage: { k: 'hero', img: 1 }, split: { k: 'list', min: 2, max: 3, img: 1, sub: 1 },
+    code: { k: 'code' }, 'two-col': { k: 'prose' }, end: { k: 'hero' }
+  };
+  const LAYOUTS = Object.keys(LSPEC);
+  const PALETTES = ['violet', 'sand', 'ocean', 'forest', 'rose', 'royal', 'snow', 'mint', 'peach'];
+  const LIGHT_PALS = ['snow', 'mint', 'peach'];
+  const LAYOUT_DOC = [
+    ["cover", "Prima slide. Titolo grande a sinistra, foto a tutta altezza a destra (senza foto: pannello colorato con emoji gigante).", "titolo + 1 frase"],
+    ["cover-center", "Prima slide alternativa, centrata. Foto a tutto schermo scurita (senza foto: campo di colore pieno).", "titolo + 1 frase"],
+    ["agenda", "Indice della presentazione: pannello colorato a sinistra, capitoli numerati a destra.", "3-5 voci \"**Capitolo** frase breve\""],
+    ["section", "Apre un capitolo. Campo di colore pieno con il numero gigante in trasparenza.", "numero capitolo (nr) + titolo + 1 frase"],
+    ["section-image", "Apre un capitolo con una foto a tutto schermo scurita a sinistra.", "numero capitolo (nr) + titolo + 1 frase"],
+    ["statement", "Una sola frase forte, enorme. Per l'idea centrale o un cambio di tono.", "1 frase (max 14 parole) + 1 riga facoltativa"],
+    ["quote", "Citazione autentica e nota, con autore. Il titolo \"# ...\" è chi parla.", "\"> frase\" + \"# Autore\""],
+    ["callout", "Idea chiave o consiglio da ricordare: icona grande, frase, dettaglio e 2-3 pillole facoltative.", "titolo + 1 frase + 0-3 pillole"],
+    ["default", "Elenco standard di 3-5 punti, a righe con barra colorata. Il jolly quando nient'altro calza.", "3-5 voci"],
+    ["cards", "3-6 concetti paralleli e indipendenti, in schede con filo di colore.", "3-6 voci"],
+    ["numbered", "Classifica o ordine di importanza (i primi 3-5), con numeri grandi.", "3-5 voci"],
+    ["icons", "2-5 caratteristiche con un'emoji grande in un cerchio. Ogni voce DEVE iniziare con l'emoji in grassetto.", "2-5 voci \"**🌊** **Etichetta** frase\""],
+    ["checklist", "Requisiti, regole, vantaggi, cose da fare: ogni voce ha la spunta.", "3-5 voci"],
+    ["definitions", "Glossario: termine a sinistra, spiegazione a destra.", "3-5 voci \"**Termine** spiegazione\""],
+    ["grid-6", "4-6 elementi brevi in griglia a filetti: proprietà, funzioni, componenti.", "4-6 voci"],
+    ["steps", "Procedura o sequenza in 3-5 passi, in orizzontale con cerchi numerati.", "3-5 voci"],
+    ["cycle", "Ciclo che si ripete: esattamente 4 fasi con frecce che chiudono il cerchio.", "esattamente 4 voci"],
+    ["funnel", "Selezione progressiva o filtro, dal più ampio al più stretto (3-5 livelli).", "3-5 voci, dal più largo"],
+    ["pyramid", "Gerarchia o livelli, dalla punta alla base (3-4 livelli).", "3-4 voci, dalla punta alla base"],
+    ["timeline", "Cronologia verticale con date a sinistra (3-5 eventi in ordine).", "3-5 voci \"**data** evento\""],
+    ["timeline-h", "Roadmap o cronologia orizzontale a 3-5 tappe.", "3-5 voci \"**anno** evento breve\""],
+    ["stats", "Da 2 a 4 cifre chiave grandi, separate da filetti. Solo cifre certe.", "2-4 voci \"**numero breve** cosa significa\""],
+    ["stat-hero", "Una cifra protagonista gigante su campo colorato e 2 cifre di contorno.", "esattamente 3 voci (la prima è la protagonista)"],
+    ["big-number", "UNA cifra enorme a tutto schermo su campo colorato. Il titolo è solo la cifra.", "\"# cifra\" (max 5 caratteri) + 1 frase"],
+    ["bars", "Confronto di 3-5 percentuali con barre orizzontali. Serve il campo values con le percentuali nello stesso ordine.", "3-5 voci + values: \"82,64,41\""],
+    ["ring", "Una percentuale in un anello grande, con titolo e frase a destra. Serve il campo value (0-100).", "titolo + 1 frase + 0-3 voci + value: 72"],
+    ["table", "Dati a righe e colonne (tabella markdown, max 5 righe x 4 colonne).", "tabella markdown con intestazione"],
+    ["compare", "Due colonne con intestazioni colorate. Dopo ::right:: va la seconda colonna.", "titolo + \"## A\" 2-3 voci + ::right:: + \"## B\" 2-3 voci"],
+    ["versus", "Due contendenti a tutto schermo con \"VS\" al centro. Niente titolo: solo i due \"##\".", "\"## A\" 3-4 voci + ::right:: + \"## B\" 3-4 voci (senza \"# titolo\")"],
+    ["pros-cons", "Vantaggi contro svantaggi, con spunte verdi e croci rosse.", "titolo + \"## Vantaggi\" + ::right:: + \"## Svantaggi\""],
+    ["before-after", "Prima e dopo, o problema e soluzione, con freccia al centro.", "titolo + \"## Prima\" + ::right:: + \"## Dopo\""],
+    ["quadrant", "Matrice 2x2 con due assi. Servono x e y (nomi degli assi) e 4 voci: alto-sx, alto-dx, basso-sx, basso-dx.", "titolo + 4 voci + x + y"],
+    ["image-right", "Titolo e 3 punti a sinistra, foto a tutta altezza a destra.", "titolo + 3 voci"],
+    ["image-left", "Foto con angoli arrotondati a sinistra, testo a filetti a destra.", "titolo + 3 voci"],
+    ["image-top", "Fascia foto in alto, titolo e 2-3 colonne di testo sotto.", "titolo + 2-3 voci brevi"],
+    ["fullimage", "Foto a tutto schermo con titolo di impatto in basso. Per i momenti emotivi.", "titolo + 1 riga"],
+    ["split", "Metà foto, metà campo colorato con titolo e punti. Molto deciso.", "titolo + 1 frase + 3 voci"],
+    ["code", "Un blocco di codice (max 10 righe) con una riga di spiegazione.", "titolo + 1 frase + blocco ```linguaggio"],
+    ["two-col", "Testo continuo su due colonne (non una lista): per spiegazioni brevi.", "titolo + 2-3 paragrafi brevi"],
+    ["end", "Ultima slide, centrata su campo colorato.", "\"# Grazie\" + 1 riga"]
+  ];
+  const layoutGuide = withFormat => LAYOUT_DOC.map(([n, u, c]) => '- ' + n + ': ' + u + (withFormat ? ' [' + c + ']' : (LSPEC[n].max ? ' [' + (LSPEC[n].min || 1) + '-' + LSPEC[n].max + ' voci]' : ''))).join('\n');
+  const MD_FORMAT = `FORMATO PER FAMIGLIA (righe nel blocco --- layout: nome --- e contenuto sotto):
+- Liste (default, cards, numbered, icons, checklist, definitions, grid-6, agenda, steps, cycle, funnel, pyramid, timeline, timeline-h, stats, stat-hero, image-right, image-left, image-top, split): "# Titolo" e voci "- **Etichetta** frase breve". icons: ogni voce inizia con l'emoji in grassetto, "- **🌊** **Etichetta** frase". stats e stat-hero: l'etichetta è una cifra breve. timeline e timeline-h: l'etichetta è la data. definitions: l'etichetta è il termine. agenda e split: dopo il titolo una frase.
+- bars: voci "- **Nome** 82% dei progetti" e nel blocco la riga values: "82,64,41" (stesso ordine). ring: nel blocco value: 72, poi titolo, una frase e 0-3 voci. quadrant: nel blocco x: e y: (nomi degli assi), titolo e 4 voci in ordine alto-sinistra, alto-destra, basso-sinistra, basso-destra.
+- Con foto (cover, cover-center, section-image, fullimage, image-right, image-left, image-top, split): nel blocco le righe icon: (emoji) e image: (ricerca foto).
+- section e section-image: nel blocco nr: numero del capitolo, poi "# Titolo" e al massimo una frase.
+- Confronti: compare, pros-cons, before-after: "# Titolo", "## A", le voci, una riga ::right::, "## B", le voci. versus: uguale ma senza "# Titolo".
+- statement e fullimage: "# Frase o titolo d'impatto" e una riga. big-number: "# 70%" (massimo 5 caratteri) e una frase. callout: nel blocco icon:, "# Idea chiave", una frase e 0-3 voci. quote: "> frase breve e forte" e poi "# Chi l'ha detta".
+- table: "# Titolo" e una tabella markdown (intestazione e massimo 4 righe). code: "# Titolo", una frase e un blocco di codice con il linguaggio (massimo 10 righe). two-col: "# Titolo" e 2-3 paragrafi brevi.`;
   const SLIDEV_EX = ['---', 'palette: sand', 'layout: cover', 'tag: Storia antica', 'icon: "🏺"', 'image: Great Pyramid of Giza at sunset', '---', '',
     '# La civiltà egizia', '', 'Tremila anni di faraoni, templi e un fiume che dava la vita', '', CMT_OPEN, 'Aprire con la domanda: come ha fatto un deserto a generare un impero?', CMT_CLOSE, '',
     '---', 'layout: cards', '---', '', '# Il dono del Nilo', '',
@@ -1882,25 +1951,18 @@ select.inp{appearance:none}
     '---', 'layout: timeline', '---', '', '# Le grandi epoche', '', '- **2686 a.C.** Antico Regno: l\'età delle piramidi', '- **2055 a.C.** Medio Regno: arte e riunificazione', '- **1550 a.C.** Nuovo Regno: l\'impero di Ramses', '',
     '---', 'layout: section', 'nr: 2', '---', '', '# Arte e scrittura', '',
     '---', 'layout: quote', '---', '', '> Ho fatto sorgere un fiume dove prima c\'era solo deserto.', '', '# Iscrizione reale', '',
+    '---', 'layout: steps', '---', '', '# Dalla piena al raccolto', '', '- **Luglio** Il Nilo inizia a salire', '- **Ottobre** Le acque si ritirano e lasciano il limo', '- **Novembre** Si semina nei campi fertili', '- **Marzo** Si miete il grano', '',
+    '---', 'layout: bars', 'values: "82,64,41"', '---', '', '# Chi coltivava cosa', '', '- **Grano** 82% dei campi', '- **Orzo** 64% dei campi', '- **Lino** 41% dei campi', '',
+    '---', 'layout: big-number', '---', '', '# 70%', '', 'Del paese è deserto', '',
     '---', 'layout: end', '---', '', '# Grazie', '', 'Domande e curiosità'].join('\n');
-  const slidevSys = n => 'Sei il direttore artistico e l\'autore di Synapse: trasformi QUALSIASI richiesta, anche di una sola riga, o qualsiasi testo allegato, in una presentazione di livello professionale, bella e chiara come quelle di Gamma. Scrivi in formato Slidev (markdown) per un tema scuro già pronto. ' +
+  const slidevSys = n => 'Sei il direttore artistico e l\'autore di Synapse: trasformi QUALSIASI richiesta, anche di una sola riga, o qualsiasi testo allegato, in una presentazione di livello professionale, bella e chiara come quelle di Gamma. Scrivi in formato Slidev (markdown) per un tema già pronto (scuro o chiaro). ' +
     'Prima, senza scriverlo, decidi: chi ascolta, qual è lo scopo, qual è la storia (apertura che incuriosisce, sviluppo, conclusione che resta). Se c\'è un testo allegato, riassumilo con fedeltà; se la richiesta è breve, completala con conoscenze solide e verificabili. ' +
     'Rispondi SOLO con il markdown, senza spiegazioni e senza recinti di codice. Lingua: quella della richiesta (italiano di default). Ortografia perfetta, nomi propri corretti, nessun refuso.\n\n' +
     'QUANTITÀ: circa ' + n + ' slide se la richiesta non indica un numero (massimo 20): cover, 1 slide di contesto, sezioni di contenuto, chiusura, slide finale.\n\n' +
-    'LAYOUT (ogni slide ne ha uno; dopo il separatore --- si scrive il blocco --- layout: nome ---). Varia: mai lo stesso layout per più di 2 slide di fila. Usa sempre almeno una slide stats, una timeline se c\'è una cronologia, una quote se c\'è una frase memorabile, e image-right o image-left per almeno un terzo delle slide.\n' +
-    '- cover: solo la prima. Righe prima del titolo: palette, tag (2-3 parole), icon (una emoji adatta), image (ricerca foto). Poi "# Titolo breve" e una frase di sottotitolo.\n' +
-    '- cards: titolo "# ..." e 3 o 4 voci "- **Etichetta** frase breve".\n' +
-    '- image-right / image-left: titolo, 3 voci "- **Etichetta** frase breve", più icon (emoji) e image (ricerca foto).\n' +
-    '- stats: titolo e 2 o 3 voci "- **numero** cosa significa". Il numero è breve (3000, 100+, 70%). Usa solo cifre che conosci con certezza.\n' +
-    '- timeline: titolo e 3-5 voci "- **data** evento", in ordine cronologico.\n' +
-    '- section: apre un capitolo. nr: numero del capitolo, "# Titolo", al massimo una frase.\n' +
-    '- quote: "> frase breve e forte" e poi "# Chi l\'ha detta".\n' +
-    '- default: titolo e 3-5 voci "- **Etichetta** frase breve" quando nessun altro layout calza.\n' +
-    '- fullimage: foto a tutto schermo con titolo d\'impatto e una riga; servono icon e image.\n' +
-    '- compare: "# Titolo", poi "## A" con 2 voci, una riga ::right::, poi "## B" con 2 voci.\n' +
-    '- end: "# Grazie" (o una chiusura adatta) e una riga.\n\n' +
-    'STILE: titoli di 2-6 parole che dicono qualcosa (non "Introduzione"). Ogni voce è un\'etichetta in grassetto + una frase di massimo 14 parole. Mai più di 4 voci in una slide, mai paragrafi lunghi. Una idea per slide. Niente tabelle, niente HTML, niente componenti, niente link.\n' +
-    'PALETTE (scegline UNA per tutta la presentazione in base al tema): violet (tecnologia, scienza), sand (antichità, deserto, storia), ocean (mare, natura, geografia), forest (ambiente, biologia), rose (arte, cultura, società), royal (storia di potere, economia, medioevo).\n' +
+    'LAYOUT: ogni slide ne ha uno (dopo il separatore --- si scrive il blocco --- layout: nome ---). Scegli dal CONTENUTO, non dall\'abitudine: cifre, sequenze, confronti e gerarchie hanno un layout loro. Mai lo stesso layout per più di 2 slide di fila; usa almeno 6 layout diversi (9 se le slide sono più di 12). default e cards sono il ripiego. Almeno metà delle slide hanno una foto.\n' +
+    layoutGuide(true) + '\n\n' + MD_FORMAT + '\n\n' +
+    'STILE: titoli di 2-6 parole che dicono qualcosa (non "Introduzione"). Ogni voce è un\'etichetta in grassetto + una frase di massimo 14 parole. Rispetta il numero di voci di ogni layout. Una idea per slide, mai paragrafi lunghi (solo two-col ne ha). Niente HTML, niente componenti, niente link.\n' +
+    'PALETTE (scegline UNA per tutta la presentazione in base al tema): scure: violet (tecnologia, scienza), sand (antichità, deserto, storia), ocean (mare, natura, geografia), forest (ambiente, biologia), rose (arte, cultura, società), royal (potere, economia, medioevo). Chiare: snow (informatica, lezioni pulite), mint (salute, natura), peach (arte, lingue, cultura).\n' +
     'FOTO: dove serve "image:" scrivi una ricerca breve IN INGLESE, concreta e fotografabile (un luogo, un oggetto, un monumento reale), per esempio "Phoenician ship replica", "Colosseum Rome interior", "Mitochondria electron microscope". Mai concetti astratti, mai persone vive, mai mappe. Ogni foto diversa dalle altre.\n' +
     'Se una slide non ha foto, l\'icon (emoji) viene mostrata grande al suo posto: scegli sempre emoji pertinenti. Le note per chi presenta vanno in un commento a fine slide (una o due frasi).\n\n' +
     'Formato esatto da seguire (cambia solo i contenuti):\n\n' + SLIDEV_EX;
@@ -1917,7 +1979,7 @@ select.inp{appearance:none}
   }
   // Slidev si ferma se un'intestazione YAML è sbagliata (tipico: un valore con i due punti). Le riscrivo io, con solo le chiavi ammesse e i valori tra virgolette.
   const yq = x => '"' + String(x).replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').trim() + '"';
-  const FM_KEYS = ['layout', 'image', 'icon', 'nr', 'tag'];
+  const FM_KEYS = ['layout', 'image', 'icon', 'nr', 'tag', 'x', 'y', 'value', 'values'];
   function readFm(blk) {
     const o = {};
     blk.split('\n').forEach(l => { const m = /^([A-Za-z_-]+):[ \t]*(.*)$/.exec(l.trim()); if (m) o[m[1]] = m[2].trim().replace(/^["']|["']$/g, ''); });
@@ -1927,8 +1989,11 @@ select.inp{appearance:none}
     const lines = [];
     const lay = LAYOUTS.includes(o.layout) ? o.layout : (layoutRequired ? 'default' : '');
     if (lay) lines.push('layout: ' + lay);
-    ['tag', 'icon', 'image'].forEach(k => { if (o[k]) lines.push(k + ': ' + yq(o[k]).slice(0, 130)); });
+    ['tag', 'icon', 'image'].forEach(k => { if (o[k]) lines.push(k + ': ' + yq(String(o[k]).slice(0, 110))); });
+    ['x', 'y'].forEach(k => { if (o[k]) lines.push(k + ': ' + yq(String(o[k]).slice(0, 24))); });
     if (o.nr && /^\d{1,2}$/.test(String(o.nr))) lines.push('nr: ' + o.nr);
+    if (o.value && /^\d{1,3}$/.test(String(o.value))) lines.push('value: ' + Math.min(100, parseInt(o.value, 10)));
+    if (o.values && /^[\d.,\s]{1,40}$/.test(String(o.values))) lines.push('values: ' + yq(String(o.values).replace(/\s+/g, '')));
     return lines;
   }
   function fixSlidev(md) {
@@ -1944,8 +2009,8 @@ select.inp{appearance:none}
       return lines.length ? '---\n' + lines.join('\n') + '\n---' : '---';
     });
     const pal = PALETTES.includes(head.palette) ? head.palette : 'violet';
-    head.layout = 'cover';
-    const top = ['---', 'theme: default', 'title: ' + yq(title), 'palette: ' + pal, 'colorSchema: dark', 'fonts:', '  sans: Plus Jakarta Sans', '  weights: "400,600,700,800"', 'transition: slide-left', ...fmOut(head, true), '---'];
+    head.layout = head.layout === 'cover-center' ? 'cover-center' : 'cover';
+    const top = ['---', 'theme: default', 'title: ' + yq(title), 'palette: ' + pal, 'colorSchema: ' + (LIGHT_PALS.includes(pal) ? 'light' : 'dark'), 'fonts:', '  sans: Plus Jakarta Sans', '  serif: Fraunces', '  mono: JetBrains Mono', '  weights: "400,600,700,800"', 'transition: slide-left', ...fmOut(head, true), '---'];
     return top.join('\n') + '\n\n' + body;
   }
   const mdTitle = md => { const t = /^title:\s*(.+)$/m.exec(md) || /^#\s+(.+)$/m.exec(md); return t ? t[1].replace(/^["']|["']$/g, '').trim().slice(0, 100) : 'Presentazione'; };
@@ -1976,21 +2041,36 @@ select.inp{appearance:none}
     '5. STORIA IN CAPITOLI: 3-5 capitoli con un titolo che incuriosisce e l\'idea chiave di ciascuno.\n' +
     '6. FOTO EVOCATIVE: 6-8 luoghi, monumenti, oggetti o scene reali e fotografabili (descritti in inglese in 3-6 parole, per esempio "Colosseum Rome interior") adatti a illustrare le slide.\n' +
     '7. FRASE FINALE: una chiusura che resta in mente. Se conosci una citazione autentica e pertinente, riportala con l\'autore; altrimenti scrivi "nessuna citazione".';
-  const deckJsonSys = n => 'Sei il direttore artistico di Synapse. Con il dossier e la richiesta costruisci una presentazione di ' + n + ' slide al livello di Gamma: chiara, elegante, con un ritmo narrativo e molte immagini. Rispondi SOLO con un oggetto JSON valido (senza testo prima o dopo, senza recinti di codice), in lingua della richiesta, con ortografia perfetta.\n\n' +
-    'SCHEMA:\n{"title":"titolo breve e forte","palette":"violet|sand|ocean|forest|rose|royal","slides":[ ...oggetti slide... ]}\n' +
-    'Ogni slide ha "layout" e i campi del suo layout; tutte possono avere "note" (1-2 frasi per chi presenta).\n' +
-    '- cover (solo la prima): {"layout":"cover","tag":"2-3 parole","title":"...","subtitle":"una frase","icon":"emoji","image":"ricerca foto"}\n' +
-    '- cards: {"layout":"cards","title":"...","items":[{"label":"1-3 parole","text":"max 14 parole"}] } con 3 o 4 voci\n' +
-    '- image-right | image-left: {"layout":"image-right","title":"...","items":[...3 voci...],"icon":"emoji","image":"ricerca foto"}\n' +
-    '- stats: {"layout":"stats","title":"...","items":[{"label":"numero breve es. 3000 o 70%","text":"cosa significa"}] } con 2 o 3 voci, solo cifre sicure\n' +
-    '- timeline: {"layout":"timeline","title":"...","items":[{"label":"data","text":"evento"}] } con 3-5 voci in ordine cronologico\n' +
-    '- compare: {"layout":"compare","title":"...","left":{"title":"A","items":[2 voci]},"right":{"title":"B","items":[2 voci]}}\n' +
-    '- fullimage: {"layout":"fullimage","title":"frase d\'impatto","subtitle":"una riga","icon":"emoji","image":"ricerca foto"}\n' +
-    '- section: {"layout":"section","title":"nome del capitolo","subtitle":"facoltativo"}\n' +
-    '- quote: {"layout":"quote","text":"frase breve","author":"chi l\'ha detta"} solo se la citazione è autentica e nota con certezza\n' +
-    '- default: {"layout":"default","title":"...","items":[...3-5 voci...]}\n' +
-    '- end (solo l\'ultima): {"layout":"end","title":"chiusura","subtitle":"una riga"}\n\n' +
-    'REGOLE DI REGIA: (1) segui un arco: apertura che incuriosisce, sviluppo a capitoli, climax, chiusura. (2) Titoli di 2-6 parole che dicono qualcosa, mai "Introduzione" o "Conclusione". (3) Una idea per slide; testo asciutto, mai paragrafi. (4) Variazione: mai lo stesso layout per più di 2 slide di fila; usa almeno una stats, una timeline se c\'è una cronologia, un fullimage di forte impatto, e almeno metà delle slide con una foto (image-right, image-left, fullimage, cover). (5) Le ricerche foto sono IN INGLESE, 3-6 parole, su soggetti reali e fotografabili (luoghi, monumenti, oggetti, animali, opere), mai concetti astratti, mai persone vive, mai mappe o schemi; ogni foto diversa dalle altre e coerente con il contenuto della slide. (6) L\'emoji "icon" è sempre pertinente. (7) Non inventare dati: usa solo ciò che sta nel dossier o che sai con certezza. (8) Scegli la palette dal tema: violet tecnologia e scienza, sand antichità e deserto, ocean mare e natura, forest ambiente e biologia, rose arte e società, royal potere, economia e medioevo.';
+  const deckJsonSys = n => `Sei il direttore artistico di Synapse. Con il dossier e la richiesta costruisci una presentazione di ` + n + ` slide al livello di Gamma: chiara, elegante, con un ritmo narrativo e molte immagini. Rispondi SOLO con un oggetto JSON valido (senza testo prima o dopo, senza recinti di codice), in lingua della richiesta, con ortografia perfetta.
+
+SCHEMA: {"title":"titolo breve e forte","palette":"violet|sand|ocean|forest|rose|royal|snow|mint|peach","slides":[ ...oggetti slide... ]}
+Ogni slide ha "layout" e i campi della sua famiglia; tutte possono avere "note" (1-2 frasi per chi presenta).
+
+CAMPI PER FAMIGLIA
+- Liste (default, cards, numbered, icons, checklist, definitions, grid-6, agenda, steps, cycle, funnel, pyramid, timeline, timeline-h, stats, stat-hero, bars, ring, quadrant, image-right, image-left, image-top, split): {"layout":"...","title":"...","items":[{"label":"1-3 parole","text":"max 14 parole"}]}
+  . icons: ogni voce ha anche "emoji" (una sola).
+  . stats e stat-hero: "label" è una cifra breve (3000, 70%, 6650), solo cifre certe.
+  . timeline e timeline-h: "label" è la data o l'anno, in ordine cronologico.
+  . definitions: "label" è il termine, "text" la spiegazione.
+  . bars: "text" inizia con la percentuale ("82% dei progetti") e aggiungi "values":[82,64,41] nello stesso ordine.
+  . ring: "value":72 (0-100), "subtitle":"una frase", da 0 a 3 voci.
+  . agenda e split: aggiungi "subtitle".
+  . quadrant: 4 voci in ordine alto-sinistra, alto-destra, basso-sinistra, basso-destra, più "x":"asse orizzontale" e "y":"asse verticale".
+- Con foto: aggiungi "icon":"emoji" e "image":"ricerca foto" a cover, cover-center, section-image, fullimage, image-right, image-left, image-top, split.
+- cover e cover-center (solo la prima): {"layout":"cover","tag":"2-3 parole","title":"...","subtitle":"una frase","icon":"emoji","image":"ricerca foto"}
+- section, section-image, fullimage, end (end solo l'ultima): {"layout":"...","title":"...","subtitle":"una riga"}
+- statement: {"layout":"statement","title":"una frase forte, max 14 parole","subtitle":"facoltativo"}; big-number: {"layout":"big-number","title":"70%","subtitle":"cosa significa"} con una cifra di massimo 5 caratteri.
+- Confronti: compare, pros-cons, before-after: {"layout":"...","title":"...","left":{"title":"A","items":[2-3 voci]},"right":{"title":"B","items":[2-3 voci]}}; versus è uguale ma senza "title" (solo left e right).
+- quote: {"layout":"quote","text":"frase breve","author":"chi l'ha detta"} solo se la citazione è autentica e nota con certezza.
+- callout: {"layout":"callout","title":"idea chiave","subtitle":"una frase","icon":"emoji","items":[da 0 a 3 voci brevi]}
+- table: {"layout":"table","title":"...","head":["A","B","C"],"rows":[["..","..",".."]]} con al massimo 4 righe e 4 colonne.
+- code: {"layout":"code","title":"...","subtitle":"una frase","lang":"python","code":"massimo 10 righe"}
+- two-col: {"layout":"two-col","title":"...","paragraphs":["...","..."]} con 2-3 paragrafi di massimo 35 parole.
+
+LAYOUT DISPONIBILI E QUANDO USARLI (scegli dal contenuto, non dall'abitudine):
+` + layoutGuide(false) + `
+
+REGOLE DI REGIA: (1) segui un arco: apertura che incuriosisce, sviluppo a capitoli, climax, chiusura. (2) Titoli di 2-6 parole che dicono qualcosa, mai "Introduzione" o "Conclusione". (3) Una idea per slide; testo asciutto, mai paragrafi (solo two-col). (4) Variazione: mai lo stesso layout per più di 2 slide di fila; usa almeno 6 layout diversi (almeno 9 se le slide sono più di 12). default e cards sono il ripiego: preferisci il layout che racconta meglio il contenuto (cifre: stats, stat-hero, big-number, bars, ring; sequenze: steps, timeline, cycle; confronti: compare, versus, pros-cons, before-after; gerarchie: pyramid, funnel). Almeno metà delle slide con una foto (cover, section-image, fullimage, image-right, image-left, image-top, split) e uno statement o big-number per il messaggio centrale. (5) Le ricerche foto sono IN INGLESE, 3-6 parole, su soggetti reali e fotografabili (luoghi, monumenti, oggetti, animali, opere), mai concetti astratti, mai persone vive, mai mappe o schemi; ogni foto diversa dalle altre e coerente con il contenuto della slide. (6) L'emoji "icon" è sempre pertinente. (7) Non inventare dati: usa solo ciò che sta nel dossier o che sai con certezza. (8) Palette dal tema. Scure: violet tecnologia e scienza, sand antichità e deserto, ocean mare e natura, forest ambiente e biologia, rose arte e società, royal potere, economia e medioevo. Chiare: snow informatica e lezioni pulite, mint salute e natura, peach arte, lingue e cultura.`;
 
   function parseJson(t) {
     t = C.stripThink(String(t || '')).trim();
@@ -2001,63 +2081,108 @@ select.inp{appearance:none}
     try { return JSON.parse(t.replace(/,\s*([\]}])/g, '$1')); } catch (e) { return null; }
   }
   const clip = (s, n) => String(s == null ? '' : s).replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').replace(/\*\*/g, '').replace(/^[#>\-*\s]+/, '').trim().slice(0, n);
-  const LAY_ALIAS = { imageright: 'image-right', image_right: 'image-right', 'image right': 'image-right', imageleft: 'image-left', image_left: 'image-left', full: 'fullimage', 'full-image': 'fullimage', full_image: 'fullimage', stat: 'stats', cover: 'cover' };
-  const LAY_MAX = { cards: 4, 'image-right': 3, 'image-left': 3, stats: 3, timeline: 5, default: 5 };
+  const LAY_ALIAS = { imageright: 'image-right', image_right: 'image-right', 'image right': 'image-right', imageleft: 'image-left', image_left: 'image-left', imagetop: 'image-top', image_top: 'image-top', full: 'fullimage', 'full-image': 'fullimage', full_image: 'fullimage', stat: 'stats', stat_hero: 'stat-hero', statshero: 'stat-hero', big_number: 'big-number', bignumber: 'big-number', pros_cons: 'pros-cons', proscons: 'pros-cons', before_after: 'before-after', beforeafter: 'before-after', timeline_h: 'timeline-h', 'timeline-horizontal': 'timeline-h', section_image: 'section-image', cover_center: 'cover-center', grid6: 'grid-6', grid_6: 'grid-6', twocol: 'two-col', two_col: 'two-col', vs: 'versus', glossary: 'definitions', list: 'default', process: 'steps' };
   function normItems(items, max) {
     return (Array.isArray(items) ? items : []).map(x => {
-      if (typeof x === 'string') { const m = /^([^:–—]{2,40})[:–—]\s*(.+)$/.exec(x); return m ? { l: clip(m[1], 36), t: clip(m[2], 110) } : { l: '', t: clip(x, 110) }; }
-      return x && typeof x === 'object' ? { l: clip(x.label || x.title || x.l || x.number || x.date || '', 36), t: clip(x.text || x.description || x.t || '', 110) } : null;
+      if (typeof x === 'string') { const m = /^([^:–—]{2,40})[:–—]\s*(.+)$/.exec(x); return m ? { l: clip(m[1], 36), t: clip(m[2], 110), e: '' } : { l: '', t: clip(x, 110), e: '' }; }
+      return x && typeof x === 'object' ? { l: clip(x.label || x.title || x.l || x.number || x.date || '', 36), t: clip(x.text || x.description || x.t || '', 110), e: clip(x.emoji || x.icon || '', 8) } : null;
     }).filter(x => x && (x.l || x.t)).slice(0, max);
   }
   const itemLine = x => '- ' + (x.l ? '**' + x.l + '** ' : '') + x.t;
+  const iconLine = x => '- **' + (x.e || '✦') + '** **' + (x.l || '·') + '** ' + x.t;
   const statLine = x => { const n = x.l.length, c = n <= 5 ? '' : n <= 9 ? 'm' : 's'; return '- **' + (c ? '<span class="' + c + '">' + x.l + '</span>' : x.l) + '** ' + x.t; };
+  const cell = x => clip(x, 30).replace(/\|/g, '/');
   function planToMd(p) {
     if (!p || !Array.isArray(p.slides)) return '';
-    let S = p.slides.filter(s => s && typeof s === 'object').slice(0, 20);
+    const S = p.slides.filter(s => s && typeof s === 'object').slice(0, 20);
     if (S.length < 3) return '';
-    S.forEach(s => { let l = String(s.layout || 'default').toLowerCase().trim(); l = LAY_ALIAS[l] || l; s.layout = LAYOUTS.includes(l) || l === 'compare' || l === 'fullimage' ? l : 'default'; });
+    S.forEach(s => { let l = String(s.layout || 'default').toLowerCase().trim(); l = LAY_ALIAS[l] || l; s.layout = LAYOUTS.includes(l) ? l : 'default'; });
     const title = clip(p.title || S[0].title, 90) || 'Presentazione';
-    if (S[0].layout !== 'cover') S.unshift({ layout: 'cover', title, subtitle: clip(p.subtitle, 120), icon: '✦' });
-    S.forEach((s, i) => { if (i > 0 && s.layout === 'cover') s.layout = 'default'; });
+    const isCover = l => l === 'cover' || l === 'cover-center';
+    if (!isCover(S[0].layout)) S.unshift({ layout: 'cover', title, subtitle: clip(p.subtitle, 120), icon: '✦' });
+    S.forEach((s, i) => { if (i > 0 && isCover(s.layout)) s.layout = 'default'; });
     if (S[S.length - 1].layout !== 'end') S.push({ layout: 'end', title: 'Grazie', subtitle: '' });
     S.forEach((s, i) => { if (i < S.length - 1 && s.layout === 'end') s.layout = 'section'; });
+    // se mancano i dati richiesti dal layout, ripiego su un layout più semplice (mai una slide rotta)
+    S.forEach(s => {
+      let sp = LSPEC[s.layout];
+      if (sp.k === 'list') {
+        const it = normItems(s.items, sp.max || 5);
+        if (s.layout === 'bars') {
+          const v = (Array.isArray(s.values) ? s.values : it.map(x => (/(\d{1,3})\s*%/.exec(x.l + ' ' + x.t) || [])[1])).map(x => parseInt(x, 10)).slice(0, it.length);
+          if (v.length < it.length || v.some(isNaN)) s.layout = 'default'; else s._v = v.map(x => Math.max(0, Math.min(100, x)));
+        }
+        if (s.layout === 'ring') { s._val = parseInt(s.value, 10); if (isNaN(s._val)) s.layout = 'statement'; }
+        else if (it.length < (LSPEC[s.layout].min || 0)) s.layout = it.length ? 'default' : 'statement';
+      } else if (sp.k === 'two') {
+        if (!normItems(s.left && s.left.items, 9).length || !normItems(s.right && s.right.items, 9).length) s.layout = 'statement';
+      } else if (sp.k === 'table') {
+        if (!(Array.isArray(s.head) && s.head.length >= 2 && Array.isArray(s.rows) && s.rows.length >= 1)) s.layout = 'statement';
+      } else if (sp.k === 'code') { if (!String(s.code || '').trim()) s.layout = 'statement'; }
+      else if (sp.k === 'prose') { if (!(Array.isArray(s.paragraphs) && s.paragraphs.length)) s.layout = 'statement'; }
+      else if (sp.k === 'quote') { if (!clip(s.text || s.title, 160)) s.layout = 'statement'; }
+      else if (s.layout === 'big-number') { if (!clip(s.title, 20) || clip(s.title, 20).length > 6) s.layout = 'statement'; }
+      else if (s.layout === 'callout') { if (!clip(s.title, 80)) s.layout = 'statement'; }
+    });
     // più foto: i layout testuali con una ricerca foto diventano immagine+testo, a lati alterni
     let side = 0;
-    S.forEach(s => { if ((s.layout === 'cards' || s.layout === 'default') && s.image && normItems(s.items, 9).length <= 4) { s.layout = side++ % 2 ? 'image-left' : 'image-right'; } });
+    S.forEach(s => { if ((s.layout === 'cards' || s.layout === 'default') && s.image && normItems(s.items, 9).length <= 3) { s.layout = side++ % 2 ? 'image-left' : 'image-right'; } });
     // niente tre layout uguali di fila
     for (let i = 2; i < S.length - 1; i++) if (S[i].layout === S[i - 1].layout && S[i].layout === S[i - 2].layout && (S[i].layout === 'cards' || S[i].layout === 'default')) S[i].layout = S[i].layout === 'cards' ? 'default' : 'cards';
     const pal = PALETTES.includes(String(p.palette).toLowerCase()) ? String(p.palette).toLowerCase() : 'violet';
     const out = []; let chap = 0;
     S.forEach((s, i) => {
-      const lay = s.layout, fm = [], body = [];
+      const lay = s.layout, sp = LSPEC[lay], fm = [], body = [];
       const t = clip(s.title, 80), sub = clip(s.subtitle, 140), icon = clip(s.icon, 8), img = clip(s.image, 110);
-      if (lay === 'cover') {
-        fm.push('palette: ' + pal, 'layout: cover'); if (s.tag) fm.push('tag: ' + clip(s.tag, 30)); fm.push('icon: ' + (icon || '✦')); if (img) fm.push('image: ' + img);
+      if (sp.k === 'cover') {
+        fm.push('palette: ' + pal, 'layout: ' + lay); if (s.tag) fm.push('tag: ' + clip(s.tag, 30)); fm.push('icon: ' + (icon || '✦')); if (img) fm.push('image: ' + img);
         body.push('# ' + (t || title)); if (sub) body.push('', sub);
       } else {
         fm.push('layout: ' + lay);
-        if (['image-right', 'image-left', 'fullimage'].includes(lay)) { fm.push('icon: ' + (icon || '✦')); if (img) fm.push('image: ' + img); }
-        if (lay === 'section') { chap++; fm.push('nr: ' + chap); }
-        if (lay === 'quote') { body.push('> ' + clip(s.text || s.title, 160)); if (s.author) body.push('', '# ' + clip(s.author, 60)); }
-        else if (lay === 'compare') {
-          body.push('# ' + (t || 'Confronto'));
-          [['left', s.left], ['right', s.right]].forEach(([k, side2], j) => {
-            const it = normItems(side2 && side2.items, 3); if (j) body.push('', '::right::');
-            body.push('', '## ' + (clip(side2 && side2.title, 30) || (j ? 'B' : 'A')), ''); it.forEach(x => body.push(itemLine(x)));
+        if (sp.img) { fm.push('icon: ' + (icon || '✦')); if (img) fm.push('image: ' + img); }
+        if (lay === 'callout') fm.push('icon: ' + (icon || '💡'));
+        if (sp.nr) { chap++; fm.push('nr: ' + chap); }
+        if (lay === 'ring') fm.push('value: ' + Math.max(0, Math.min(100, s._val)));
+        if (lay === 'bars') fm.push('values: ' + s._v.join(','));
+        if (lay === 'quadrant') fm.push('x: ' + (clip(s.x, 24) || 'Impegno'), 'y: ' + (clip(s.y, 24) || 'Valore'));
+        if (sp.k === 'quote') { body.push('> ' + clip(s.text || s.title, 160)); if (s.author) body.push('', '# ' + clip(s.author, 60)); }
+        else if (sp.k === 'two') {
+          const dflt = { compare: ['A', 'B'], 'pros-cons': ['Vantaggi', 'Svantaggi'], 'before-after': ['Prima', 'Dopo'], versus: ['A', 'B'] }[lay];
+          if (lay !== 'versus') body.push('# ' + (t || 'Confronto'));
+          [s.left, s.right].forEach((sd, j) => {
+            if (j) body.push('', '::right::');
+            body.push('', '## ' + (clip(sd && sd.title, 30) || dflt[j]), '');
+            normItems(sd && sd.items, sp.max).forEach(x => body.push(itemLine(x)));
           });
+        } else if (sp.k === 'table') {
+          const head = s.head.slice(0, 4).map(cell);
+          body.push('# ' + (t || 'Dati'), '', '| ' + head.join(' | ') + ' |', '|' + head.map(() => '---').join('|') + '|');
+          s.rows.slice(0, 4).forEach(r => { const c = (Array.isArray(r) ? r : []).slice(0, head.length).map(cell); while (c.length < head.length) c.push(''); body.push('| ' + c.join(' | ') + ' |'); });
+        } else if (sp.k === 'code') {
+          const code = String(s.code).replace(/`{3,}/g, '').replace(/\r/g, '').split('\n').slice(0, 10).map(l => l.slice(0, 70)).join('\n').replace(/^\n+/, '').replace(/\s+$/, '');
+          const lang = /^[a-z0-9+#-]{1,12}$/i.test(String(s.lang || '')) ? String(s.lang).toLowerCase() : 'text';
+          body.push('# ' + (t || 'Codice')); if (sub) body.push('', sub);
+          body.push('', '`' + '``' + lang, code, '`' + '``');
+        } else if (sp.k === 'prose') {
+          body.push('# ' + (t || 'Titolo'));
+          s.paragraphs.slice(0, 3).forEach(x => { const c = clip(x, 260); if (c) body.push('', c); });
+        } else if (sp.k === 'hero') {
+          body.push('# ' + (t || 'Titolo')); if (sub) body.push('', sub);
+        } else if (sp.k === 'callout') {
+          body.push('# ' + t); if (sub) body.push('', sub);
+          const it = normItems(s.items, 3); if (it.length) { body.push(''); it.forEach(x => body.push(itemLine(x))); }
         } else {
           body.push('# ' + (t || 'Titolo'));
-          if (sub && ['section', 'fullimage', 'end'].includes(lay)) body.push('', sub);
-          const it = normItems(s.items, LAY_MAX[lay] || 5);
-          if (it.length && !['section', 'fullimage', 'end'].includes(lay)) { body.push(''); it.forEach(x => body.push(lay === 'stats' ? statLine(x) : itemLine(x))); }
+          if (sub && sp.sub) body.push('', sub);
+          const it = normItems(s.items, sp.max || 5);
+          if (it.length) { body.push(''); it.forEach(x => body.push(lay === 'stats' || lay === 'stat-hero' ? statLine(x) : lay === 'icons' ? iconLine(x) : itemLine(x))); }
         }
       }
-      let block = (i === 0 ? '---\n' : '---\n') + fm.join('\n') + '\n---\n\n' + body.join('\n');
+      let block = '---\n' + fm.join('\n') + '\n---\n\n' + body.join('\n');
       const note = clip(s.note, 300); if (note) block += '\n\n' + CMT_OPEN + '\n' + note + '\n' + CMT_CLOSE;
       out.push(block);
     });
-    const joined = out.join('\n\n');
-    return joined;
+    return out.join('\n\n');
   }
 
   async function writeDeck(o, brain, bKey, st) {
