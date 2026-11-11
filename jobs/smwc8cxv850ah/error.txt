@@ -1,0 +1,1 @@
+Il workflow GitHub Actions è fallito prima dell'esportazione: guarda la scheda Actions del repository.
